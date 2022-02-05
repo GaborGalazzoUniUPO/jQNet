@@ -1,5 +1,8 @@
 package uniupo.valpre.bcnnsim.random;
 
+import java.util.Formatter;
+import java.util.Locale;
+
 public class LogNormalDistribution extends Distribution
 {
 
@@ -16,5 +19,10 @@ public class LogNormalDistribution extends Distribution
 	@Override
 	public Double generate(RandomGenerator stream) {
 		return  (Math.exp(a + b * normalDistribution.generate(stream)));
+	}
+
+	@Override
+	public String toString() {
+		return new Formatter(Locale.US).format("LogNormalDistribution(a=%.4f,b=%.4f)", a,b).toString();
 	}
 }

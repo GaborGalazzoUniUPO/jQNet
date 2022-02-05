@@ -18,15 +18,6 @@ public class NormalDistribution extends Distribution
 		this.sigma = sigma;
 	}
 
-	public Double generatePositive(RandomGenerator stream)
-	{
-		double result;
-		// get the job at the head of the queue
-		while ((result = generate(stream)) < 0) ;
-
-		return result;
-	}
-
 	public Double generate(RandomGenerator rng)
 	{
 		final double p0 = 0.322232431088;     final double q0 = 0.099348462606;

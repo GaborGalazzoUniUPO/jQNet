@@ -13,6 +13,7 @@ import uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy;
 import uniupo.valpre.bcnnsim.random.ExponentialDistribution;
 import uniupo.valpre.bcnnsim.random.LehmerGenerator;
 import uniupo.valpre.bcnnsim.random.NormalDistribution;
+import uniupo.valpre.bcnnsim.random.PositiveNormalDistribution;
 
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -72,7 +73,7 @@ public class Simulator
 		OpenCustomerClass customerClass = new OpenCustomerClass("c", source);
 
 		source.setServiceTimeDistribution(customerClass, new ExponentialDistribution(4.2));
-		q1.setServiceTimeDistribution(customerClass, new NormalDistribution(3.2, 0.6));
+		q1.setServiceTimeDistribution(customerClass, new PositiveNormalDistribution(3.2, 0.6));
 
 
 		source.addOutput(q1);
@@ -94,7 +95,7 @@ public class Simulator
 		ClosedCustomerClass customerClass = new ClosedCustomerClass("c",10, delay);
 
 		delay.setServiceTimeDistribution(customerClass, new ExponentialDistribution(4.2));
-		q1.setServiceTimeDistribution(customerClass, new NormalDistribution(3.2, 0.6));
+		q1.setServiceTimeDistribution(customerClass, new PositiveNormalDistribution(3.2, 0.6));
 
 
 		delay.addOutput(q1);
@@ -121,8 +122,8 @@ public class Simulator
 		ClosedCustomerClass customerClass = new ClosedCustomerClass("c",10, delay);
 
 		delay.setServiceTimeDistribution(customerClass, new ExponentialDistribution(4.2));
-		q1.setServiceTimeDistribution(customerClass, new NormalDistribution(3.2, 0.6));
-		q2.setServiceTimeDistribution(customerClass, new NormalDistribution(3.2, 0.6));
+		q1.setServiceTimeDistribution(customerClass, new PositiveNormalDistribution(3.2, 0.6));
+		q2.setServiceTimeDistribution(customerClass, new PositiveNormalDistribution(3.2, 0.6));
 
 
 		delay.addOutput(q1);

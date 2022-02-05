@@ -26,4 +26,8 @@ public class ExponentialDistribution extends Distribution
 	{
 		return new Formatter(Locale.US).format("ExponentialDistribution(μ=%.4f)", mean).toString();
 	}
+
+	public double getMean() {
+		return mean;
+	}
 }
