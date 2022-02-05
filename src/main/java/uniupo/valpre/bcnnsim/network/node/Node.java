@@ -5,6 +5,7 @@ import uniupo.valpre.bcnnsim.network.classes.CustomerClass;
 import uniupo.valpre.bcnnsim.random.Distribution;
 import uniupo.valpre.bcnnsim.Event;
 import uniupo.valpre.bcnnsim.network.routing.RoutingStrategy;
+import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.*;
 
@@ -89,7 +90,7 @@ public abstract class Node
 	public abstract boolean isValid();
 
 
-	public abstract List<Event> manageEvent(Event event, Random stream);
+	public abstract List<Event> manageEvent(Event event, RandomGenerator stream);
 
 	public RoutingStrategy getRoutingStrategy()
 	{

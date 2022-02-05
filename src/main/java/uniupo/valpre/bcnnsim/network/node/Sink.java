@@ -1,6 +1,7 @@
 package uniupo.valpre.bcnnsim.network.node;
 
 import uniupo.valpre.bcnnsim.Event;
+import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.List;
 import java.util.Random;
@@ -21,7 +22,7 @@ public class Sink extends Node
 	}
 
 	@Override
-	public List<Event> manageEvent(Event event, Random stream)
+	public List<Event> manageEvent(Event event, RandomGenerator stream)
 	{
 		return List.of();
 	}

@@ -4,6 +4,7 @@ import uniupo.valpre.bcnnsim.ArrivalEvent;
 import uniupo.valpre.bcnnsim.DepartureEvent;
 import uniupo.valpre.bcnnsim.Event;
 import uniupo.valpre.bcnnsim.network.routing.RoutingStrategy;
+import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -40,7 +41,7 @@ public class Queue extends Node
 	}
 
 	@Override
-	public List<Event> manageEvent(Event event, Random stream)
+	public List<Event> manageEvent(Event event, RandomGenerator stream)
 	{
 		servers.updateBusyTime((event.getTime() - lastEventTime));
 		accQueueLen += (customerQueue.size())* (event.getTime() - lastEventTime);
@@ -116,8 +117,7 @@ public class Queue extends Node
 		System.out.printf("%-50s %.6f\n", "MEAN NUMBER OF CUSTOMERS IN THIS NODE", accCustomerInStation / lastEventTime);
 		System.out.printf("%-50s %.6f\n", "MEAN NUMBER OF CUSTOMERS IN QUEUE", accQueueLen / lastEventTime);
 		System.out.printf("%-50s %.6f\n", "MEAN NUMBER OF CUSTOMERS SERVER", (accCustomerInStation - accQueueLen) / lastEventTime);
-		System.out.printf("%-50s %d\n", "QUEUE MAX LEN", maxQueueLen);
-		System.out.printf("%-50s %.6f\n", "QUEUE MEAN LENGTH ", accQueueLen / lastEventTime);
+		System.out.printf("%-50s %d\n", "MAX NUMBER OF CUSTOMERS IN QUEUE", maxQueueLen);
 		System.out.printf("%-50s %.2f min\n", "AVG QUEUE TIME ", accQueueTime / numerOfDepartures);
 		System.out.printf("%-50s %.2f min\n", "AVG SERVICE TIME ", (accResponseTime - accQueueTime) / numerOfDepartures);
 		System.out.printf("%-50s %.2f min\n", "AVG RESPONSE TIME ", accResponseTime / numerOfDepartures);

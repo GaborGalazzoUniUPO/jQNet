@@ -1,18 +1,19 @@
 package uniupo.valpre.bcnnsim.network.routing;
 
 import uniupo.valpre.bcnnsim.network.node.Node;
+import uniupo.valpre.bcnnsim.random.LehmerGenerator;
+import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class ProbabilityRoutingStrategy extends RoutingStrategy
 {
-	private final Random stream;
+	private final RandomGenerator stream;
 	private final Map<String, Double> probabilities;
 
-	public ProbabilityRoutingStrategy(Random stream, Map<String, Double> probabilities)
+	public ProbabilityRoutingStrategy(LehmerGenerator stream, Map<String, Double> probabilities)
 	{
 		this.stream = stream;
 		this.probabilities = probabilities;
@@ -24,7 +25,7 @@ public class ProbabilityRoutingStrategy extends RoutingStrategy
 		if(outputs.isEmpty()) return null;
 		if(outputs.size() == 1) return outputs.iterator().next();
 		var sum = probabilities.values().stream().reduce(Double::sum).orElse(0.0);
-		var pin = stream.nextDouble() * sum;
+		var pin = stream.random() * sum;
 		var last = 0.0;
 		for (Map.Entry<String, Double> prob : probabilities.entrySet())
 		{

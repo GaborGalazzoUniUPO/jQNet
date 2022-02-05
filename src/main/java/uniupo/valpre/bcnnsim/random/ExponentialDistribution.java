@@ -16,9 +16,9 @@ public class ExponentialDistribution extends Distribution
 	}
 
 	@Override
-	public Double generate(Random stream)
+	public Double generate(RandomGenerator stream)
 	{
-		return -mean*Math.log( stream.nextDouble() );
+		return -mean*Math.log( stream.random() );
 	}
 
 	@Override

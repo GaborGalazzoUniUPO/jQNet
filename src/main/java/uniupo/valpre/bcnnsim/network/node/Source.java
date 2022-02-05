@@ -4,6 +4,7 @@ import uniupo.valpre.bcnnsim.ArrivalEvent;
 import uniupo.valpre.bcnnsim.Event;
 import uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy;
 import uniupo.valpre.bcnnsim.network.routing.RoutingStrategy;
+import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.List;
 import java.util.Random;
@@ -23,7 +24,7 @@ public class Source extends Node
 	}
 
 	@Override
-	public List<Event> manageEvent(Event event, Random stream)
+	public List<Event> manageEvent(Event event, RandomGenerator stream)
 	{
 		if(event instanceof ArrivalEvent e){
 			return List.of(

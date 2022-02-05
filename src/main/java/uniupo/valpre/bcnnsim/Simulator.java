@@ -11,6 +11,7 @@ import uniupo.valpre.bcnnsim.network.node.Source;
 import uniupo.valpre.bcnnsim.network.routing.ProbabilityRoutingStrategy;
 import uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy;
 import uniupo.valpre.bcnnsim.random.ExponentialDistribution;
+import uniupo.valpre.bcnnsim.random.LehmerGenerator;
 import uniupo.valpre.bcnnsim.random.NormalDistribution;
 
 import java.util.Map;
@@ -24,7 +25,7 @@ public class Simulator
 	private boolean ended;
 	private double simTime = 0L;
 	private QueueNetwork network;
-	private Random stream = new Random(0);
+	private LehmerGenerator stream = new LehmerGenerator(0);
 	private int i = 0;
 
 	public void init()

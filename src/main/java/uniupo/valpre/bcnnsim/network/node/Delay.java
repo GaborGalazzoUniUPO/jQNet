@@ -4,6 +4,7 @@ import uniupo.valpre.bcnnsim.ArrivalEvent;
 import uniupo.valpre.bcnnsim.DepartureEvent;
 import uniupo.valpre.bcnnsim.Event;
 import uniupo.valpre.bcnnsim.network.routing.RoutingStrategy;
+import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.*;
 
@@ -27,7 +28,7 @@ public class Delay extends Node
 	}
 
 	@Override
-	public List<Event> manageEvent(Event event, Random stream)
+	public List<Event> manageEvent(Event event, RandomGenerator stream)
 	{
 		accCustomerInStation += busyServerCount * (event.getTime() - lastEventTime);
 		var futureEvents = new ArrayList<Event>();
