@@ -10,17 +10,15 @@ import java.util.Random;
 
 public class ProbabilityRoutingStrategy extends RoutingStrategy
 {
-	private final RandomGenerator stream;
 	private final Map<String, Double> probabilities;
 
-	public ProbabilityRoutingStrategy(LehmerGenerator stream, Map<String, Double> probabilities)
+	public ProbabilityRoutingStrategy(Map<String, Double> probabilities)
 	{
-		this.stream = stream;
 		this.probabilities = probabilities;
 
 	}
 	@Override
-	public Node choose(Collection<Node> outputs)
+	public Node choose(Collection<Node> outputs, RandomGenerator stream)
 	{
 		if(outputs.isEmpty()) return null;
 		if(outputs.size() == 1) return outputs.iterator().next();

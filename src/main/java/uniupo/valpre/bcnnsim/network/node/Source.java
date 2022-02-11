@@ -24,12 +24,12 @@ public class Source extends Node
 	}
 
 	@Override
-	public List<Event> manageEvent(Event event, RandomGenerator stream)
+	public List<Event> manageEvent(Event event, RandomGenerator activityStream, RandomGenerator routingStream)
 	{
 		if(event instanceof ArrivalEvent e){
 			return List.of(
-					new ArrivalEvent(getRoutingStrategy().choose(getOutputs()),e.getCustomerClass(), e.getTime()),
-					new ArrivalEvent(this, e.getCustomerClass(),e.getTime() +  getServiceTimeDistribution(e.getCustomerClass()).generate(stream))
+					new ArrivalEvent(getRoutingStrategy().choose(getOutputs(), routingStream),e.getCustomerClass(), e.getTime()),
+					new ArrivalEvent(this, e.getCustomerClass(),e.getTime() +  getServiceTimeDistribution(e.getCustomerClass()).generate(activityStream))
 			);
 		}
 		return List.of();

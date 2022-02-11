@@ -41,7 +41,7 @@ public class Queue extends Node
 	}
 
 	@Override
-	public List<Event> manageEvent(Event event, RandomGenerator stream)
+	public List<Event> manageEvent(Event event, RandomGenerator activityStream, RandomGenerator routingStream)
 	{
 		servers.updateBusyTime((event.getTime() - lastEventTime));
 		accQueueLen += (customerQueue.size())* (event.getTime() - lastEventTime);
@@ -65,7 +65,7 @@ public class Queue extends Node
 								event.getCustomerClass(),
 								server.id,
 								e.getTime(),
-								e.getTime() + getServiceTimeDistribution(e.getCustomerClass()).generate(stream))
+								e.getTime() + getServiceTimeDistribution(e.getCustomerClass()).generate(activityStream))
 				);
 			}
 		} else if (event instanceof DepartureEvent e)
@@ -81,7 +81,7 @@ public class Queue extends Node
 								event.getCustomerClass(),
 								server.id,
 								customer.arrivalEvent.getTime(),
-								e.getTime() + getServiceTimeDistribution(e.getCustomerClass()).generate(stream))
+								e.getTime() + getServiceTimeDistribution(e.getCustomerClass()).generate(activityStream))
 				);
 				accQueueTime += e.getTime() - customer.getArrivalEvent().getTime();
 			}
@@ -91,7 +91,7 @@ public class Queue extends Node
 
 			futureEvents.add(
 					new ArrivalEvent(
-							getRoutingStrategy().choose(getOutputs()),
+							getRoutingStrategy().choose(getOutputs(), routingStream),
 							e.getCustomerClass(),
 							e.getTime())
 			);

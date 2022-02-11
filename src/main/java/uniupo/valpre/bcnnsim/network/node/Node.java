@@ -90,7 +90,7 @@ public abstract class Node
 	public abstract boolean isValid();
 
 
-	public abstract List<Event> manageEvent(Event event, RandomGenerator stream);
+	public abstract List<Event> manageEvent(Event event, RandomGenerator activityStream, RandomGenerator routingStream);
 
 	public RoutingStrategy getRoutingStrategy()
 	{

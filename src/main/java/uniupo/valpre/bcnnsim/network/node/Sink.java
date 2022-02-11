@@ -22,7 +22,7 @@ public class Sink extends Node
 	}
 
 	@Override
-	public List<Event> manageEvent(Event event, RandomGenerator stream)
+	public List<Event> manageEvent(Event event, RandomGenerator activityStream, RandomGenerator routingStream)
 	{
 		return List.of();
 	}

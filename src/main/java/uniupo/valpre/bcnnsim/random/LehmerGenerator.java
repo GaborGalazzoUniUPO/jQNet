@@ -1,48 +1,57 @@
 package uniupo.valpre.bcnnsim.random;
 
-import java.nio.ByteBuffer;
 import java.util.Date;
 
 public class LehmerGenerator implements RandomGenerator {
 
-    private final long a;
-    private final long m;
-    private final long q;
-    private final long r;
 
-    private long state = 1;
+	public static final long DEFAULT_MULTIPLIER = 48271;
+	public static final long DEFAULT_MODULE = (long) (Math.pow(2, 31) - 1);
+	public static final long DEFAULT_SEED = 123456789L; /* initial seed, use 0 < DEFAULT < MODULUS   */
 
-    long DEFAULT      = 123456789L; /* initial seed, use 0 < DEFAULT < MODULUS   */
+	private final long multiplier;
+	private final long modulus;
+	private final long q;
+	private final long r;
+	private long state;
 
-    long seed         = DEFAULT;    /* seed is the state of the generator        */
 
-    public LehmerGenerator(long a, long m, long seed) {
-        this.a = a;
-        this.m = m;
-        q = m/a;
-        r = m % a;
-        this.seed = seed % m;
-    }
+	public LehmerGenerator(long multiplier, long modulus, long seed) {
+		this.multiplier = multiplier;
+		this.modulus = modulus;
+		q = modulus / multiplier;
+		r = modulus % multiplier;
+		this.state = seed % modulus;
+	}
 
-    public LehmerGenerator(long a, long m) {
-       this(a,m,new Date().getTime());
-    }
+	public void setSeed(long seed) {
+		this.state = seed % modulus;
+	}
 
-    public LehmerGenerator(long seed){
-        this(48271, (long) (Math.pow(2,31) - 1), seed);
-    }
+	public LehmerGenerator(long a, long m) {
+		this(a, m, new Date().getTime());
+	}
 
-    public LehmerGenerator(){
-        this(new Date().getTime());
-    }
+	public LehmerGenerator(long seed) {
+		this(DEFAULT_MULTIPLIER, DEFAULT_MODULE, seed);
+	}
 
-    public double random() {
-        long  t = a * (state % q) - r * (state / q);
-        if(t > 0){
-            state = t;
-        }else {
-            state = t + m;
-        }
-        return ((double) state) / m;
-    }
+	public LehmerGenerator() {
+		this(DEFAULT_SEED);
+	}
+
+	public double random() {
+		long t = multiplier * (state % q) - r * (state / q);
+		if (t > 0) {
+			state = t;
+		} else {
+			state = t + modulus;
+		}
+		return ((double) state) / modulus;
+	}
+
+	@Override
+	public long getSeed() {
+		return state;
+	}
 }

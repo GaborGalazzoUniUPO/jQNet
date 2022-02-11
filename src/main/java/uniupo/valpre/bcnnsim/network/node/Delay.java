@@ -28,7 +28,7 @@ public class Delay extends Node
 	}
 
 	@Override
-	public List<Event> manageEvent(Event event, RandomGenerator stream)
+	public List<Event> manageEvent(Event event, RandomGenerator activityStream, RandomGenerator routingStream)
 	{
 		accCustomerInStation += busyServerCount * (event.getTime() - lastEventTime);
 		var futureEvents = new ArrayList<Event>();
@@ -42,7 +42,7 @@ public class Delay extends Node
 							event.getCustomerClass(),
 							0,
 							e.getTime(),
-							e.getTime() + getServiceTimeDistribution(e.getCustomerClass()).generate(stream))
+							e.getTime() + getServiceTimeDistribution(e.getCustomerClass()).generate(activityStream))
 			);
 		} else if (event instanceof DepartureEvent e)
 		{
@@ -52,7 +52,7 @@ public class Delay extends Node
 
 			futureEvents.add(
 					new ArrivalEvent(
-							getRoutingStrategy().choose(getOutputs()),
+							getRoutingStrategy().choose(getOutputs(), routingStream),
 							e.getCustomerClass(),
 							e.getTime())
 			);

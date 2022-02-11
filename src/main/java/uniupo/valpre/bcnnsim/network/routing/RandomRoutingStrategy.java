@@ -10,15 +10,13 @@ import java.util.Random;
 public class RandomRoutingStrategy extends RoutingStrategy
 {
 
-	private final RandomGenerator stream;
 
-	public RandomRoutingStrategy(RandomGenerator stream)
+
+	public RandomRoutingStrategy()
 	{
-		this.stream = stream;
-
 	}
 
-	public Node choose(Collection<Node> outputs)
+	public Node choose(Collection<Node> outputs, RandomGenerator stream)
 	{
 		if(outputs.isEmpty()) return null;
 		if(outputs.size() == 1) return (Node) outputs.toArray()[0];
