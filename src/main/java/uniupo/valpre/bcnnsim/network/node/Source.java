@@ -1,5 +1,6 @@
 package uniupo.valpre.bcnnsim.network.node;
 
+import com.google.gson.JsonObject;
 import uniupo.valpre.bcnnsim.ArrivalEvent;
 import uniupo.valpre.bcnnsim.Event;
 import uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy;
@@ -7,6 +8,7 @@ import uniupo.valpre.bcnnsim.network.routing.RoutingStrategy;
 import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class Source extends Node
@@ -15,6 +17,10 @@ public class Source extends Node
 	public Source(String name, RoutingStrategy routingStrategy)
 	{
 		super(name, routingStrategy);
+	}
+
+	public Source(JsonObject json, Map<String, Node> memory) {
+		super(json, memory);
 	}
 
 	@Override

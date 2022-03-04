@@ -1,13 +1,28 @@
-package uniupo.valpre.bcnnsim.random;
+package uniupo.valpre.bcnnsim.random.distribution;
+
+import com.google.gson.JsonObject;
+import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.Formatter;
 import java.util.Locale;
+import java.util.Map;
 
 public class BernoulliDistribution  extends Distribution{
 
     private final double winRate;
     public BernoulliDistribution(double winRate) {
         this.winRate = winRate;
+    }
+
+    public BernoulliDistribution(JsonObject jsonObject, Map<String, Object> memory){
+        this.winRate = jsonObject.get("winRate").getAsDouble();
+    }
+
+    @Override
+    public JsonObject jsonSerialize() {
+        var json =  super.jsonSerialize();
+        json.addProperty("winRate", this.winRate);
+        return json;
     }
 
     @Override

@@ -1,10 +1,13 @@
 package uniupo.valpre.bcnnsim.network.routing;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import uniupo.valpre.bcnnsim.network.node.Node;
 import uniupo.valpre.bcnnsim.random.LehmerGenerator;
 import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -15,8 +18,15 @@ public class ProbabilityRoutingStrategy extends RoutingStrategy
 	public ProbabilityRoutingStrategy(Map<String, Double> probabilities)
 	{
 		this.probabilities = probabilities;
-
 	}
+
+	public ProbabilityRoutingStrategy(JsonObject json, Map<String, Node> memory){
+		var probabilities = new HashMap<String, Double>();
+		var jProbabilities = json.get("probabilities").getAsJsonObject();
+		jProbabilities.keySet().forEach(k -> probabilities.put(k, jProbabilities.get(k).getAsDouble()));
+		this.probabilities = probabilities;
+	}
+
 	@Override
 	public Node choose(Collection<Node> outputs, RandomGenerator stream)
 	{
@@ -32,5 +42,14 @@ public class ProbabilityRoutingStrategy extends RoutingStrategy
 			last += prob.getValue();
 		}
 		return outputs.iterator().next();
+	}
+
+	@Override
+	public JsonObject jsonSerialize() {
+		var json = super.jsonSerialize();
+		var jProbabilities = new JsonObject();
+		this.probabilities.entrySet().forEach(e -> jProbabilities.addProperty(e.getKey(), e.getValue()));
+		json.add("probabilities", jProbabilities);
+		return json;
 	}
 }

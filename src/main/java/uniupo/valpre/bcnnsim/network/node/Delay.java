@@ -1,5 +1,6 @@
 package uniupo.valpre.bcnnsim.network.node;
 
+import com.google.gson.JsonObject;
 import uniupo.valpre.bcnnsim.ArrivalEvent;
 import uniupo.valpre.bcnnsim.DepartureEvent;
 import uniupo.valpre.bcnnsim.Event;
@@ -19,6 +20,10 @@ public class Delay extends Node
 	public Delay(String name, RoutingStrategy routingStrategy)
 	{
 		super(name, routingStrategy);
+	}
+
+	public Delay(JsonObject json, Map<String, Node> memory) {
+		super(json, memory);
 	}
 
 	@Override

@@ -1,15 +1,13 @@
 package uniupo.valpre.bcnnsim.network.node;
 
+import com.google.gson.JsonObject;
 import uniupo.valpre.bcnnsim.ArrivalEvent;
 import uniupo.valpre.bcnnsim.DepartureEvent;
 import uniupo.valpre.bcnnsim.Event;
 import uniupo.valpre.bcnnsim.network.routing.RoutingStrategy;
 import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Queue extends Node
 {
@@ -33,6 +31,17 @@ public class Queue extends Node
 		this.servers = new Servers(numServer);
 	}
 
+	public Queue(JsonObject json, Map<String, Node> memory) {
+		super(json, memory);
+		this.servers = new Servers(json.get("numServer").getAsInt());
+	}
+
+	@Override
+	public JsonObject jsonSerialize() {
+		var jNode = super.jsonSerialize();
+		jNode.addProperty("numServer", this.servers.count());
+		return jNode;
+	}
 
 	@Override
 	public boolean isValid()

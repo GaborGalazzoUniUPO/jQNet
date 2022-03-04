@@ -1,8 +1,11 @@
-package uniupo.valpre.bcnnsim.random;
+package uniupo.valpre.bcnnsim.random.distribution;
+
+import com.google.gson.JsonObject;
+import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.Formatter;
 import java.util.Locale;
-import java.util.Random;
+import java.util.Map;
 
 public class ExponentialDistribution extends Distribution
 {
@@ -13,6 +16,17 @@ public class ExponentialDistribution extends Distribution
 	{
 		super();
 		this.mean = mean;
+	}
+
+	public ExponentialDistribution(JsonObject jsonObject, Map<String, Object> memory){
+		this.mean = jsonObject.get("mean").getAsDouble();
+	}
+
+	@Override
+	public JsonObject jsonSerialize() {
+		var json =  super.jsonSerialize();
+		json.addProperty("mean", this.mean);
+		return json;
 	}
 
 	@Override

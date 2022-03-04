@@ -1,7 +1,13 @@
-package uniupo.valpre.bcnnsim.random;
+package uniupo.valpre.bcnnsim.random.distribution;
+
+import com.google.gson.JsonObject;
+import lombok.SneakyThrows;
+import uniupo.valpre.bcnnsim.network.node.Node;
+import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.Formatter;
 import java.util.Locale;
+import java.util.Map;
 
 public class ChiSquareDistribution extends Distribution {
     private final long freedomDegree;
@@ -9,6 +15,18 @@ public class ChiSquareDistribution extends Distribution {
 
     public ChiSquareDistribution(long freedomDegree) {
         this.freedomDegree = freedomDegree;
+    }
+
+    @SneakyThrows
+    public ChiSquareDistribution(JsonObject jsonObject, Map<String, Node> memory){
+        this.freedomDegree = jsonObject.get("freedomDegree").getAsLong();
+    }
+
+    @Override
+    public JsonObject jsonSerialize() {
+        var json =  super.jsonSerialize();
+        json.addProperty("freedomDegree", this.freedomDegree);
+        return json;
     }
 
     @Override

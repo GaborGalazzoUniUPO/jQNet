@@ -1,7 +1,11 @@
-package uniupo.valpre.bcnnsim.random;
+package uniupo.valpre.bcnnsim.random.distribution;
+
+import com.google.gson.JsonObject;
+import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.Formatter;
 import java.util.Locale;
+import java.util.Map;
 
 public class GeometricDistribution extends Distribution{
 
@@ -9,6 +13,17 @@ public class GeometricDistribution extends Distribution{
 
     public GeometricDistribution(double p) {
         this.p = p;
+    }
+
+    public GeometricDistribution(JsonObject jsonObject, Map<String, Object> memory){
+        this.p = jsonObject.get("p").getAsDouble();
+    }
+
+    @Override
+    public JsonObject jsonSerialize() {
+        var json =  super.jsonSerialize();
+        json.addProperty("p", this.p);
+        return json;
     }
 
     @Override

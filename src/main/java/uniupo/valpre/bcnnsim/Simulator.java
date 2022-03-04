@@ -9,6 +9,8 @@ import uniupo.valpre.bcnnsim.network.node.Queue;
 import uniupo.valpre.bcnnsim.network.routing.ProbabilityRoutingStrategy;
 import uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy;
 import uniupo.valpre.bcnnsim.random.*;
+import uniupo.valpre.bcnnsim.random.distribution.ExponentialDistribution;
+import uniupo.valpre.bcnnsim.random.distribution.PositiveNormalDistribution;
 
 import java.util.*;
 
@@ -84,7 +86,7 @@ public class Simulator
 		return rng;
 	}
 
-	private QueueNetwork modello1()
+	public static QueueNetwork modello1()
 	{
 		Source source = new Source("source", new RandomRoutingStrategy());
 		Queue q1 = new Queue("q1", 1, new RandomRoutingStrategy());
@@ -107,7 +109,7 @@ public class Simulator
 				.build();
 	}
 
-	private QueueNetwork modello2()
+	static QueueNetwork modello2()
 	{
 		Delay delay = new Delay("delay", new RandomRoutingStrategy());
 		Queue q1 = new Queue("q1", 2, new RandomRoutingStrategy());
@@ -129,7 +131,7 @@ public class Simulator
 				.build();
 	}
 
-	private QueueNetwork modello3()
+	static QueueNetwork modello3()
 	{
 		var p = 0.7;
 		Queue q1 = new Queue("q1", 1, new RandomRoutingStrategy());

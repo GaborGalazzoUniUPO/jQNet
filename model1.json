@@ -1,0 +1,64 @@
+{
+  "class": "uniupo.valpre.bcnnsim.network.QueueNetwork",
+  "serviceTimeDistributions": [
+    {
+      "node": "q1",
+      "class": "c",
+      "distribution": {
+        "class": "uniupo.valpre.bcnnsim.random.distribution.PositiveNormalDistribution",
+        "mean": 3.2,
+        "sigma": 0.6
+      }
+    },
+    {
+      "node": "source",
+      "class": "c",
+      "distribution": {
+        "class": "uniupo.valpre.bcnnsim.random.distribution.ExponentialDistribution",
+        "mean": 4.2
+      }
+    }
+  ],
+  "links": {
+    "q1": [
+      "sink"
+    ],
+    "sink": [],
+    "source": [
+      "q1"
+    ]
+  },
+  "nodes": [
+    {
+      "class": "uniupo.valpre.bcnnsim.network.node.Queue",
+      "name": "q1",
+      "routingStrategy": {
+        "class": "uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy"
+      },
+      "numServer": 1
+    },
+    {
+      "class": "uniupo.valpre.bcnnsim.network.node.Sink",
+      "name": "sink"
+    },
+    {
+      "class": "uniupo.valpre.bcnnsim.network.node.Source",
+      "name": "source",
+      "routingStrategy": {
+        "class": "uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy"
+      }
+    }
+  ],
+  "classes": [
+    {
+      "class": "uniupo.valpre.bcnnsim.network.classes.OpenCustomerClass",
+      "name": "c",
+      "priority": 0,
+      "referenceStation": "source",
+      "interArrivalTimeDistribution": {
+        "class": "uniupo.valpre.bcnnsim.random.distribution.ExponentialDistribution",
+        "mean": 1.0
+      }
+    }
+  ]
+}

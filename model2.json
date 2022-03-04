@@ -1,0 +1,56 @@
+{
+  "class": "uniupo.valpre.bcnnsim.network.QueueNetwork",
+  "serviceTimeDistributions": [
+    {
+      "node": "q1",
+      "class": "c",
+      "distribution": {
+        "class": "uniupo.valpre.bcnnsim.random.distribution.PositiveNormalDistribution",
+        "mean": 3.2,
+        "sigma": 0.6
+      }
+    },
+    {
+      "node": "delay",
+      "class": "c",
+      "distribution": {
+        "class": "uniupo.valpre.bcnnsim.random.distribution.ExponentialDistribution",
+        "mean": 4.2
+      }
+    }
+  ],
+  "links": {
+    "q1": [
+      "delay"
+    ],
+    "delay": [
+      "q1"
+    ]
+  },
+  "nodes": [
+    {
+      "class": "uniupo.valpre.bcnnsim.network.node.Queue",
+      "name": "q1",
+      "routingStrategy": {
+        "class": "uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy"
+      },
+      "numServer": 2
+    },
+    {
+      "class": "uniupo.valpre.bcnnsim.network.node.Delay",
+      "name": "delay",
+      "routingStrategy": {
+        "class": "uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy"
+      }
+    }
+  ],
+  "classes": [
+    {
+      "class": "uniupo.valpre.bcnnsim.network.classes.ClosedCustomerClass",
+      "name": "c",
+      "numCustomer": 10,
+      "priority": 0,
+      "referenceStation": "delay"
+    }
+  ]
+}

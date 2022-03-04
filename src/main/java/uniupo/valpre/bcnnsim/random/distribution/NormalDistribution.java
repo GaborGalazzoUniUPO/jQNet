@@ -1,10 +1,13 @@
-package uniupo.valpre.bcnnsim.random;
+package uniupo.valpre.bcnnsim.random.distribution;
+
+import com.google.gson.JsonObject;
+import lombok.SneakyThrows;
+import uniupo.valpre.bcnnsim.network.node.Node;
+import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.Formatter;
 import java.util.Locale;
-import java.util.Random;
-
-import static java.lang.Math.PI;
+import java.util.Map;
 
 public class NormalDistribution extends Distribution
 {
@@ -12,10 +15,23 @@ public class NormalDistribution extends Distribution
 	private final double mean;
 	private final double sigma;
 
-	public NormalDistribution(double mean, double sigma)
-	{
+	public NormalDistribution(double mean, double sigma) {
 		this.mean = mean;
 		this.sigma = sigma;
+	}
+
+	@SneakyThrows
+	public NormalDistribution(JsonObject jsonObject, Map<String, Node> memory){
+		this.mean = jsonObject.get("mean").getAsDouble();
+		this.sigma = jsonObject.get("sigma").getAsDouble();
+	}
+
+	@Override
+	public JsonObject jsonSerialize() {
+		var json =  super.jsonSerialize();
+		json.addProperty("mean", this.mean);
+		json.addProperty("sigma", this.sigma);
+		return json;
 	}
 
 	public Double generate(RandomGenerator rng)
