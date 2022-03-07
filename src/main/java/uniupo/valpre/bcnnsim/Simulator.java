@@ -5,70 +5,65 @@ import uniupo.valpre.bcnnsim.network.classes.ClosedCustomerClass;
 import uniupo.valpre.bcnnsim.network.classes.CustomerClass;
 import uniupo.valpre.bcnnsim.network.classes.OpenCustomerClass;
 import uniupo.valpre.bcnnsim.network.node.*;
-import uniupo.valpre.bcnnsim.network.node.Queue;
 import uniupo.valpre.bcnnsim.network.routing.ProbabilityRoutingStrategy;
 import uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy;
-import uniupo.valpre.bcnnsim.random.*;
+import uniupo.valpre.bcnnsim.random.LehmerGenerator;
+import uniupo.valpre.bcnnsim.random.MultipleLehmerStreamGenerator;
+import uniupo.valpre.bcnnsim.random.RandomGenerator;
 import uniupo.valpre.bcnnsim.random.distribution.ExponentialDistribution;
 import uniupo.valpre.bcnnsim.random.distribution.PositiveNormalDistribution;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.stream.IntStream;
 
-public class Simulator
-{
-	private final PriorityQueue<Event> fel = new PriorityQueue<Event>();
-
-	private boolean ended;
-	private double simTime = 0L;
-	private QueueNetwork network;
+public class Simulator {
 	private MultipleLehmerStreamGenerator streamsGenerator = new MultipleLehmerStreamGenerator();
 	private List<RandomGenerator> streams = streamsGenerator.generateStreams(LehmerGenerator.DEFAULT_SEED);
 	private HashMap<String, RandomGenerator> activityStreams = new HashMap<>();
 	private HashMap<String, RandomGenerator> routingStreams = new HashMap<>();
 	private int usedStreams = 0;
 
-	public void init()
-	{
-	}
 
-	public void runSimulation()
-	{
-
-		network = modello3();
-
-		for (CustomerClass aClass : network.getClasses())
-		{
-			if (aClass instanceof OpenCustomerClass c)
-			{
-				fel.add(new ArrivalEvent(c.getReferenceStation(), c,
-						simTime + c.getInterArrivalTimeDistribution().generate(
-								getActivityStream(c.getReferenceStation())
-						)));
-			}else if (aClass instanceof ClosedCustomerClass c){
-				for(int i = 0; i<c.getNumCustomer(); i++){
-					fel.add(new ArrivalEvent(c.getReferenceStation(), c, simTime));
+	public void runSimulation(QueueNetwork originalNetwork, int numRuns, String referenceStation, long maxNumOfDeparture) {
+		IntStream.range(0, numRuns).parallel().forEach(num -> {
+			boolean ended = false;
+			double simTime = 0L;
+			PriorityQueue<Event> fel = new PriorityQueue<Event>();
+			var network = originalNetwork.clone();
+			for (CustomerClass aClass : network.getClasses()) {
+				if (aClass instanceof OpenCustomerClass c) {
+					fel.add(new ArrivalEvent(c.getReferenceStation(), c,
+							simTime + c.getInterArrivalTimeDistribution().generate(
+									getActivityStream(c.getReferenceStation())
+							)));
+				} else if (aClass instanceof ClosedCustomerClass c) {
+					for (int i = 0; i < c.getNumCustomer(); i++) {
+						fel.add(new ArrivalEvent(c.getReferenceStation(), c, simTime));
+					}
 				}
 			}
-		}
 
-		Event event;
-		while ((event = fel.poll()) != null && !ended)
-		{
-			simTime = event.getTime();
-			var events = event.getReferenceStation().manageEvent(event,
-					getActivityStream(event.getReferenceStation()),
-					getRoutingStream(event.getReferenceStation()));
-			fel.addAll(events);
-			checkEnded();
-		}
-		ended = true;
+			Event event;
+			while ((event = fel.poll()) != null && !ended) {
+				simTime = event.getTime();
+				var events = event.getReferenceStation().manageEvent(event,
+						getActivityStream(event.getReferenceStation()),
+						getRoutingStream(event.getReferenceStation()));
+				fel.addAll(events);
+				ended = network.getNode(referenceStation).getNumerOfDepartures() > maxNumOfDeparture;
+			}
 
-		network.generateReport();
+			network.generateReport();
+		});
+
 	}
 
 	private RandomGenerator getRoutingStream(Node referenceStation) {
 		var rng = routingStreams.get(referenceStation.getName());
-		if(rng == null){
+		if (rng == null) {
 			rng = streams.get(usedStreams);
 			usedStreams++;
 			routingStreams.put(referenceStation.getName(), rng);
@@ -78,7 +73,7 @@ public class Simulator
 
 	private RandomGenerator getActivityStream(Node referenceStation) {
 		var rng = activityStreams.get(referenceStation.getName());
-		if(rng == null){
+		if (rng == null) {
 			rng = streams.get(usedStreams);
 			usedStreams++;
 			activityStreams.put(referenceStation.getName(), rng);
@@ -86,8 +81,7 @@ public class Simulator
 		return rng;
 	}
 
-	public static QueueNetwork modello1()
-	{
+	public static QueueNetwork modello1() {
 		Source source = new Source("source", new RandomRoutingStrategy());
 		Queue q1 = new Queue("q1", 1, new RandomRoutingStrategy());
 		Sink sink = new Sink("sink");
@@ -109,12 +103,11 @@ public class Simulator
 				.build();
 	}
 
-	static QueueNetwork modello2()
-	{
+	static QueueNetwork modello2() {
 		Delay delay = new Delay("delay", new RandomRoutingStrategy());
 		Queue q1 = new Queue("q1", 2, new RandomRoutingStrategy());
 
-		ClosedCustomerClass customerClass = new ClosedCustomerClass("c",10, delay);
+		ClosedCustomerClass customerClass = new ClosedCustomerClass("c", 10, delay);
 
 		delay.setServiceTimeDistribution(customerClass, new ExponentialDistribution(4.2));
 		q1.setServiceTimeDistribution(customerClass, new PositiveNormalDistribution(3.2, 0.6));
@@ -126,22 +119,21 @@ public class Simulator
 		return QueueNetwork
 				.Builder
 				.builder()
-				.withNodes(delay,q1)
+				.withNodes(delay, q1)
 				.withClasses(customerClass)
 				.build();
 	}
 
-	static QueueNetwork modello3()
-	{
+	static QueueNetwork modello3() {
 		var p = 0.7;
 		Queue q1 = new Queue("q1", 1, new RandomRoutingStrategy());
 		Queue q2 = new Queue("q2", 1, new RandomRoutingStrategy());
 		Delay delay = new Delay("delay", new ProbabilityRoutingStrategy(Map.of(
 				"q1", p,
-				"q2", 1-p
+				"q2", 1 - p
 		)));
 
-		ClosedCustomerClass customerClass = new ClosedCustomerClass("c",10, delay);
+		ClosedCustomerClass customerClass = new ClosedCustomerClass("c", 10, delay);
 
 		delay.setServiceTimeDistribution(customerClass, new ExponentialDistribution(4.2));
 		q1.setServiceTimeDistribution(customerClass, new PositiveNormalDistribution(3.2, 0.6));
@@ -156,13 +148,8 @@ public class Simulator
 		return QueueNetwork
 				.Builder
 				.builder()
-				.withNodes(delay,q1,q2)
+				.withNodes(delay, q1, q2)
 				.withClasses(customerClass)
 				.build();
-	}
-
-	private void checkEnded()
-	{
-		ended = network.getNode("q1").getNumerOfDepartures() > 100000;
 	}
 }

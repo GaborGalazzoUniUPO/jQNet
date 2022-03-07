@@ -53,6 +53,6 @@ public class ClosedCustomerClass extends CustomerClass
 
 	protected ClosedCustomerClass(JsonObject jsonObject, Map<String, Node> memory) {
 		super(jsonObject, memory);
-		this.numCustomer =	jsonObject.get("priority").getAsInt();
+		this.numCustomer =	jsonObject.get("numCustomer").getAsInt();
 	}
 }

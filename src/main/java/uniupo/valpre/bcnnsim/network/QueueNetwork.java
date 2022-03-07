@@ -195,4 +195,9 @@ public class QueueNetwork extends JsonSerializable {
 
 
 	}
+
+	@Override
+	public QueueNetwork clone() {
+		return new QueueNetwork(jsonSerialize());
+	}
 }
