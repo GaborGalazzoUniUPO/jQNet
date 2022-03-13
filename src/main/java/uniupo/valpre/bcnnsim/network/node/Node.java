@@ -93,8 +93,8 @@ public abstract class Node extends JsonSerializable {
 		return routingStrategy;
 	}
 
-	public void generateReport() {
-
+	public Map<String, Double> generateReport() {
+		return new HashMap<>();
 	}
 
 	public long getNumerOfDepartures() {

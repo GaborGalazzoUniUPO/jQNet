@@ -67,8 +67,10 @@ public class Delay extends Node
 	}
 
 	@Override
-	public void generateReport()
+	public Map<String, Double> generateReport()
 	{
+
+		/*
 		System.out.println("----------------------------------------------------");
 		System.out.printf("REPORT FOR Delay '%s'\n", getName());
 		getServiceTimeDistributions().forEach(e -> {
@@ -82,6 +84,16 @@ public class Delay extends Node
 		System.out.printf("%-50s %.6f\n", "MEAN NUMBER OF CUSTOMERS IN THIS NODE", accCustomerInStation / lastEventTime);
 		System.out.printf("%-50s %.2f min\n", "AVG DELAY TIME ", accDelayTime / numerOfDepartures);
 		System.out.printf("%-50s %.2f min\n", "AVG ARRIVAL TIME ", accArrivalTime / numerOfDepartures);
-		System.out.println("----------------------------------------------------");
+		System.out.println("----------------------------------------------------");*/
+		var resp = new HashMap<String, Double>();
+		resp.put("NUMBER_OF_CUSTOMERS_SERVED", (double) numerOfDepartures);
+		resp.put("SIMULATION_RUN_LENGTH", (double) lastEventTime);
+		resp.put("NODE_THROUGHPUT", (double) numerOfDepartures / lastEventTime);
+		resp.put("MEAN_NUMBER_OF_CUSTOMERS_IN_THIS_NODE", (double) accCustomerInStation / lastEventTime);
+		resp.put("AVG_DELAY_TIME", (double) accDelayTime / numerOfDepartures);
+		resp.put("AVG_ARRIVAL_TIME", (double) accArrivalTime / numerOfDepartures);
+		return resp;
+
+
 	}
 }

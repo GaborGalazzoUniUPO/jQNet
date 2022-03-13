@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 public class QueueNetwork extends JsonSerializable {
 	private final HashMap<String, Node> nodes = new HashMap<String, Node>();
@@ -73,10 +74,12 @@ public class QueueNetwork extends JsonSerializable {
 		return addedClasses;
 	}
 
-	public void generateReport() {
+	public Map<String, Map<String, Double>> generateReport() {
+		var resp = new HashMap<String, Map<String, Double>>();
 		for (Node value : nodes.values()) {
-			value.generateReport();
+			resp.put(value.getName(),value.generateReport());
 		}
+		return resp;
 	}
 
 	public static class Builder {
