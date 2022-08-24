@@ -2,7 +2,10 @@ package uniupo.valpre.bcnnsim.sim;
 
 import uniupo.valpre.bcnnsim.random.Student;
 
+import java.io.PrintStream;
+import java.io.Writer;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class MultiRunNetworkReport {
 	private final int runs;
@@ -13,7 +16,7 @@ public class MultiRunNetworkReport {
 		this.reports = reports;
 	}
 
-	public HashMap<String, HashMap<String, ValueStream>> checkAccuracy(double alphaLevel, PrecisionType a, double precision) {
+	public HashMap<String, HashMap<String, ValueStream>> getResults() {
 		var all = new HashMap<String, HashMap<String, ValueStream>>();
 		for (NetworkReport report : reports) {
 			for (Map.Entry<String, NodeReport> e : report.getNodeReports().entrySet()) {
@@ -28,9 +31,10 @@ public class MultiRunNetworkReport {
 			}
 		}
 
+		/*
 		for (Map.Entry<String, HashMap<String, ValueStream>> e : all.entrySet()) {
-			System.out.println(e.getKey());
-			System.out.println();
+			outputStream.accept(e.getKey());
+			outputStream.accept("");
 			for (Map.Entry<String, ValueStream> stringValueStreamEntry : e.getValue().entrySet()) {
 				var ms = stringValueStreamEntry.getValue().getMetricStatistics(alphaLevel, a, precision);
 				var s = String.format("mean:%10.3f     sd:%10.3f    ci:%10.3f    mss:%13d    aa:%5s    lv:%10.3f",
@@ -40,10 +44,10 @@ public class MultiRunNetworkReport {
 						ms.mss(),
 						((ms.mss() == null || ms.mss() < reports.size()) ? "\033[0;32m OK " : "\033[0;31m NO") + "\033[0m",
 						ms.lv());
-				System.out.printf("%50s   %50s%n", stringValueStreamEntry.getKey(), s);
+				outputStream.accept(String.format("%50s   %50s%n", stringValueStreamEntry.getKey(), s));
 			}
 
-		}
+		}*/
 		return all;
 
 	}
@@ -64,7 +68,7 @@ public class MultiRunNetworkReport {
 			var stdev = Math.sqrt(sum / (float) (values.size() - 1));
 
 			if (isAbsolute) {
-				return new MetricStatistics(mean, stdev, null, null, null, 1.);
+				return new MetricStatistics(mean, stdev, null, null, null, true);
 			}
 
 			var stdevOfMean = stdev / Math.sqrt(values.size() - 1);
@@ -78,7 +82,7 @@ public class MultiRunNetworkReport {
 				mss = (int) Math.ceil(Math.pow(tCritical * stdev / (precisionRequirement * mean), 2));
 			}
 
-			return new MetricStatistics(mean, stdev, tc, mss, alphaLevel, 1. - ((float) mss / (float) values.size()));
+			return new MetricStatistics(mean, stdev, tc, mss, alphaLevel,  mss< values.size());
 		}
 
 
@@ -91,7 +95,7 @@ public class MultiRunNetworkReport {
 		}
 	}
 
-	public record MetricStatistics(Double mean, Double sd, Double tc, Integer mss, Double lv, Double sampleScore) {
+	public record MetricStatistics(Double mean, Double sd, Double tc, Integer mss, Double lv, boolean done) {
 	}
 
 	public enum PrecisionType {

@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 public class Simulator {
@@ -28,8 +31,9 @@ public class Simulator {
 	private ArrayList<NetworkReport> allReports = new ArrayList<>();
 
 
-	public MultiRunNetworkReport runSimulation(QueueNetwork originalNetwork, int numRuns, String referenceStation, long maxNumOfDeparture) {
-		var progressBar = new ProgressBar("Job", maxNumOfDeparture * numRuns);
+	public MultiRunNetworkReport runSimulation(QueueNetwork originalNetwork, int numRuns, String referenceStation, long maxNumOfDeparture,
+											   Consumer<Long> progress) {
+		var step = new AtomicLong(0);
 		var reports = IntStream.range(0, numRuns).parallel().mapToObj(num -> {
 			boolean ended = false;
 			double simTime = 0L;
@@ -57,7 +61,7 @@ public class Simulator {
 				fel.addAll(events);
 				if (event instanceof DepartureEvent e) {
 					if (e.getReferenceStation().getName().equals(referenceStation)) {
-						progressBar.step();
+						progress.accept(step.incrementAndGet());
 					}
 				}
 				var departures = network.getNode(referenceStation).getNumberOfDepartures();
@@ -66,7 +70,6 @@ public class Simulator {
 			return network.generateNetworkReport();
 		}).toList();
 		allReports.addAll(reports);
-		progressBar.close();
 		return new MultiRunNetworkReport(numRuns, allReports);
 	}
 

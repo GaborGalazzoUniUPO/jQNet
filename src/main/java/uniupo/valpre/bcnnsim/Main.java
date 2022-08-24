@@ -1,14 +1,18 @@
 package uniupo.valpre.bcnnsim;
 
+import com.github.weisj.darklaf.LafManager;
+import com.github.weisj.darklaf.theme.DarculaTheme;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import uniupo.valpre.bcnnsim.gui.MainGUI;
 import uniupo.valpre.bcnnsim.network.QueueNetwork;
 import uniupo.valpre.bcnnsim.network.node.Node;
 import uniupo.valpre.bcnnsim.sim.MultiRunNetworkReport;
 import uniupo.valpre.bcnnsim.sim.NetworkReport;
 import uniupo.valpre.bcnnsim.sim.Simulator;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -18,6 +22,23 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Main {
+
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(() -> {
+			LafManager.setTheme(new DarculaTheme());
+			LafManager.install();
+			var frame = new JFrame("ValPre QNet Simulator - Gabor Galazzo 20024195");
+			frame.setContentPane(new MainGUI().getMainPanel());
+			frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+			frame.pack();
+			frame.setVisible(true);
+		});
+
+
+	}
+
+
+	/*
 	public static void main(String[] args) throws IOException {
 
 
@@ -89,4 +110,6 @@ public class Main {
 
 
 	}
+
+	 */
 }
