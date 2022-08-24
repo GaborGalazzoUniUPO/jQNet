@@ -1,12 +1,11 @@
 package uniupo.valpre.bcnnsim.network.node;
 
 import com.google.gson.JsonObject;
-import uniupo.valpre.bcnnsim.Event;
+import uniupo.valpre.bcnnsim.network.event.Event;
 import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class Sink extends Node
 {
@@ -30,6 +29,8 @@ public class Sink extends Node
 	@Override
 	public List<Event> manageEvent(Event event, RandomGenerator activityStream, RandomGenerator routingStream)
 	{
+		numberOfArrivals++;
+		numberOfDepartures++;
 		return List.of();
 	}
 }

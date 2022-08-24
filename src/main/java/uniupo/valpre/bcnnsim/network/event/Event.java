@@ -1,4 +1,4 @@
-package uniupo.valpre.bcnnsim;
+package uniupo.valpre.bcnnsim.network.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

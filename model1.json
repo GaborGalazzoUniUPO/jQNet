@@ -35,7 +35,7 @@
       "routingStrategy": {
         "class": "uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy"
       },
-      "numServer": 1
+      "numServer": 2
     },
     {
       "class": "uniupo.valpre.bcnnsim.network.node.Sink",

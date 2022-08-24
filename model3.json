@@ -63,7 +63,7 @@
       "routingStrategy": {
         "class": "uniupo.valpre.bcnnsim.network.routing.ProbabilityRoutingStrategy",
         "probabilities": {
-          "q2": 0.30000000000000004,
+          "q2": 0.3,
           "q1": 0.7
         }
       }

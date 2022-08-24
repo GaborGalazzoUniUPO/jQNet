@@ -4,25 +4,23 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import uniupo.valpre.bcnnsim.network.QueueNetwork;
-import uniupo.valpre.bcnnsim.network.classes.OpenCustomerClass;
 import uniupo.valpre.bcnnsim.network.node.Node;
-import uniupo.valpre.bcnnsim.network.node.Queue;
-import uniupo.valpre.bcnnsim.network.node.Sink;
-import uniupo.valpre.bcnnsim.network.node.Source;
-import uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy;
-import uniupo.valpre.bcnnsim.random.distribution.ExponentialDistribution;
-import uniupo.valpre.bcnnsim.random.distribution.PositiveNormalDistribution;
+import uniupo.valpre.bcnnsim.sim.MultiRunNetworkReport;
+import uniupo.valpre.bcnnsim.sim.NetworkReport;
+import uniupo.valpre.bcnnsim.sim.Simulator;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class Main
-{
+public class Main {
 	public static void main(String[] args) throws IOException {
+
+
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 		var scanner = new Scanner(System.in);
@@ -35,30 +33,60 @@ public class Main
 
 		var q = new QueueNetwork(json);
 
-		System.out.print("Seleziona una stazione di riferimento per la terminazione [" +  q.getNodes().stream().map(Node::getName).collect(Collectors.joining(","))+ "]\n>");
+		System.out.print("Seleziona una stazione di riferimento per la terminazione [" + q.getNodes().stream().map(Node::getName).collect(Collectors.joining(",")) + "]\n>");
 
 		var referenceStation = scanner.next();
 
 		System.out.print("Numero di partenze per terminazione\n>");
 		var maxNumOfDeparture = scanner.nextLong();
 
-		System.out.print("Numero di partenze run\n>");
-		var numRun = scanner.nextInt();
+		System.out.print("Numero di run\n>");
+		var inputNumRun = scanner.nextInt();
+		var numRun = inputNumRun;
 
+		System.out.print("Alpha level\n>");
+		var alphaLevel = scanner.nextDouble();
+
+		System.out.print("Precision Type\n>");
+		var precisionType = scanner.next();
+
+		System.out.print("Precision\n>");
+		var precision = scanner.nextDouble();
 
 		var simulator = new Simulator();
 		System.out.println("Simulazione in corso...");
-		simulator.runSimulation(q, numRun, referenceStation, maxNumOfDeparture);
+		if (inputNumRun < 1) {
+			numRun = 100;
+		}
+
+		var totalRuns = 0;
+
+		var endSym = false;
+		while (!endSym) {
+			var report = simulator.runSimulation(q, numRun, referenceStation, maxNumOfDeparture);
+			var accReport = report.checkAccuracy(alphaLevel,
+					precisionType.equals("a") ? MultiRunNetworkReport.PrecisionType.Absolute : MultiRunNetworkReport.PrecisionType.Relative,
+					precision
+			);
+			totalRuns += 100;
+
+			if (inputNumRun < 1) {
+				endSym = true;
+				for (Map.Entry<String, HashMap<String, MultiRunNetworkReport.ValueStream>> e : accReport.entrySet()) {
+					for (Map.Entry<String, MultiRunNetworkReport.ValueStream> ee : e.getValue().entrySet()) {
+						var m = ee.getValue().getMetricStatistics(alphaLevel,
+								precisionType.equals("a") ? MultiRunNetworkReport.PrecisionType.Absolute : MultiRunNetworkReport.PrecisionType.Relative,
+								precision);
+						if (m.mss() != null)
+							endSym = endSym && (m.mss() < totalRuns);
+					}
+				}
+			} else {
+				System.out.print("Proseguire con la simulazione [y/n]\n>");
+				endSym = !scanner.next().equalsIgnoreCase("y");
+			}
+		}
 
 
-		/*
-		Simulator simulator = new Simulator();
-		simulator.init();
-		simulator.runSimulation();
-		/*
-		var rng = new LehmerGenerator(48271, (long) (Math.pow(2,31) - 1));
-		for (int i = 0; i<100; i++){
-			System.out.println(rng.random());
-		}*/
 	}
 }

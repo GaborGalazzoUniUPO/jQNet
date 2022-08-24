@@ -1,0 +1,101 @@
+package uniupo.valpre.bcnnsim.sim;
+
+import uniupo.valpre.bcnnsim.random.Student;
+
+import java.util.*;
+
+public class MultiRunNetworkReport {
+	private final int runs;
+	private final List<NetworkReport> reports;
+
+	public MultiRunNetworkReport(int runs, List<NetworkReport> reports) {
+		this.runs = runs;
+		this.reports = reports;
+	}
+
+	public HashMap<String, HashMap<String, ValueStream>> checkAccuracy(double alphaLevel, PrecisionType a, double precision) {
+		var all = new HashMap<String, HashMap<String, ValueStream>>();
+		for (NetworkReport report : reports) {
+			for (Map.Entry<String, NodeReport> e : report.getNodeReports().entrySet()) {
+				var l = all.getOrDefault(e.getKey(), new HashMap<>());
+				for (Map.Entry<String, Double> data : e.getValue().getData().entrySet()) {
+					var vs = l.getOrDefault(data.getKey(), new ValueStream());
+					vs.add(data.getValue());
+					l.put(data.getKey(), vs);
+					vs.setAbsolute(e.getValue().isAbsolute(data.getKey()));
+				}
+				all.put(e.getKey(), l);
+			}
+		}
+
+		for (Map.Entry<String, HashMap<String, ValueStream>> e : all.entrySet()) {
+			System.out.println(e.getKey());
+			System.out.println();
+			for (Map.Entry<String, ValueStream> stringValueStreamEntry : e.getValue().entrySet()) {
+				var ms = stringValueStreamEntry.getValue().getMetricStatistics(alphaLevel, a, precision);
+				var s = String.format("mean:%10.3f     sd:%10.3f    ci:%10.3f    mss:%13d    aa:%5s    lv:%10.3f",
+						ms.mean(),
+						ms.sd(),
+						ms.tc(),
+						ms.mss(),
+						((ms.mss() == null || ms.mss() < reports.size()) ? "\033[0;32m OK " : "\033[0;31m NO") + "\033[0m",
+						ms.lv());
+				System.out.printf("%50s   %50s%n", stringValueStreamEntry.getKey(), s);
+			}
+
+		}
+		return all;
+
+	}
+
+	public static class ValueStream {
+		private final List<Double> values = new ArrayList<>();
+		private boolean isAbsolute = false;
+
+		public void add(Double value) {
+			values.add(value);
+		}
+
+		public MetricStatistics getMetricStatistics(Double alphaLevel, PrecisionType precisionType, Double precisionRequirement) {
+
+			var sum = values.stream().reduce(Double::sum).orElseThrow();
+			var mean = sum / values.size();
+			sum = values.stream().reduce((a, v) -> Math.pow(v - mean, 2) + a).orElseThrow();
+			var stdev = Math.sqrt(sum / (float) (values.size() - 1));
+
+			if (isAbsolute) {
+				return new MetricStatistics(mean, stdev, null, null, null, 1.);
+			}
+
+			var stdevOfMean = stdev / Math.sqrt(values.size() - 1);
+			var tCritical = Student.getInstance().idfStudent(values.size() - 1, (1 + alphaLevel) * 0.5);
+			var tc = tCritical * stdevOfMean;
+
+			var mss = 0;
+			if (precisionType == PrecisionType.Absolute) {
+				mss = (int) Math.ceil(Math.pow(tCritical * stdev / precisionRequirement, 2));
+			} else {
+				mss = (int) Math.ceil(Math.pow(tCritical * stdev / (precisionRequirement * mean), 2));
+			}
+
+			return new MetricStatistics(mean, stdev, tc, mss, alphaLevel, 1. - ((float) mss / (float) values.size()));
+		}
+
+
+		public boolean isAbsolute() {
+			return isAbsolute;
+		}
+
+		public void setAbsolute(boolean absolute) {
+			isAbsolute = absolute;
+		}
+	}
+
+	public record MetricStatistics(Double mean, Double sd, Double tc, Integer mss, Double lv, Double sampleScore) {
+	}
+
+	public enum PrecisionType {
+		Absolute,
+		Relative
+	}
+}

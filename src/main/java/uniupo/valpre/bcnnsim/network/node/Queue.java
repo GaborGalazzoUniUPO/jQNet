@@ -1,11 +1,12 @@
 package uniupo.valpre.bcnnsim.network.node;
 
 import com.google.gson.JsonObject;
-import uniupo.valpre.bcnnsim.ArrivalEvent;
-import uniupo.valpre.bcnnsim.DepartureEvent;
-import uniupo.valpre.bcnnsim.Event;
+import uniupo.valpre.bcnnsim.network.event.ArrivalEvent;
+import uniupo.valpre.bcnnsim.network.event.DepartureEvent;
+import uniupo.valpre.bcnnsim.network.event.Event;
 import uniupo.valpre.bcnnsim.network.routing.RoutingStrategy;
 import uniupo.valpre.bcnnsim.random.RandomGenerator;
+import uniupo.valpre.bcnnsim.sim.NodeReport;
 
 import java.util.*;
 
@@ -62,6 +63,7 @@ public class Queue extends Node
 		var futureEvents = new ArrayList<Event>();
 		if (event instanceof ArrivalEvent e)
 		{
+			numberOfArrivals++;
 			accArrivalTime += e.getTime() - lastEventTime;
 			var customer = new Customer(e);
 			customerQueue.add(customer);
@@ -96,7 +98,7 @@ public class Queue extends Node
 			}
 
 			accResponseTime += e.getTime() - e.getArrivalTime();
-			numerOfDepartures++;
+			numberOfDepartures++;
 
 			futureEvents.add(
 					new ArrivalEvent(
@@ -109,52 +111,22 @@ public class Queue extends Node
 		return futureEvents;
 	}
 
-	public Map<String, Double> generateReport()
+	public NodeReport generateNodeReport()
 	{
-		/*
-		System.out.println("----------------------------------------------------");
-		System.out.printf("REPORT FOR Queue '%s'\n", getName());
-		System.out.printf("%-50s %d\n", "#servers", servers.count());
-		getServiceTimeDistributions().forEach(e -> {
-			System.out.printf("%-30s class: %-12s %s\n", "Service time distribution", e.getKey() , e.getValue().toString());
-		});
-
-		System.out.println();
-		System.out.println();
-		System.out.printf("%-50s %d cus\n", "NUMBER OF CUSTOMERS SERVED", numerOfDepartures);
-		System.out.printf("%-50s %.4f min\n", "SIMULATION RUN LENGTH ", lastEventTime);
-		System.out.printf("%-50s %.4f cus/min\n", "NODE THROUGHPUT ", numerOfDepartures / lastEventTime);
-		System.out.printf("%-50s %.6f\n", "MEAN NUMBER OF CUSTOMERS IN THIS NODE", accCustomerInStation / lastEventTime);
-		System.out.printf("%-50s %.6f\n", "MEAN NUMBER OF CUSTOMERS IN QUEUE", accQueueLen / lastEventTime);
-		System.out.printf("%-50s %.6f\n", "MEAN NUMBER OF CUSTOMERS SERVER", (accCustomerInStation - accQueueLen) / lastEventTime);
-		System.out.printf("%-50s %d\n", "MAX NUMBER OF CUSTOMERS IN QUEUE", maxQueueLen);
-		System.out.printf("%-50s %.2f min\n", "AVG QUEUE TIME ", accQueueTime / numerOfDepartures);
-		System.out.printf("%-50s %.2f min\n", "AVG SERVICE TIME ", (accResponseTime - accQueueTime) / numerOfDepartures);
-		System.out.printf("%-50s %.2f min\n", "AVG RESPONSE TIME ", accResponseTime / numerOfDepartures);
-		System.out.printf("%-50s %.2f min\n", "AVG ARRIVAL TIME ", accArrivalTime / numerOfDepartures);
-		System.out.println();
+		var resp = super.generateNodeReport();
+		resp.put("SIMULATION_RUN_LENGTH", lastEventTime, true);
+		resp.put("NODE_THROUGHPUT", (double) numberOfDepartures / lastEventTime);
+		resp.put("MEAN_NUMBER_OF_CUSTOMERS_IN_THIS_NODE", accCustomerInStation / lastEventTime);
+		resp.put("MEAN_NUMBER_OF_CUSTOMERS_IN_QUEUE", accQueueLen / lastEventTime);
+		resp.put("MEAN_NUMBER_OF_CUSTOMERS_SERVED", (accCustomerInStation - accQueueLen) / lastEventTime);
+		resp.put("MAX_NUMBER_OF_CUSTOMERS_IN_QUEUE", (accCustomerInStation - accQueueLen) / lastEventTime);
+		resp.put("AVG_QUEUE_TIME", accQueueTime / numberOfDepartures);
+		resp.put("AVG_SERVICE_TIME", (accResponseTime - accQueueTime) / numberOfDepartures);
+		resp.put("AVG_RESPONSE_TIME", accResponseTime / numberOfDepartures);
+		resp.put("AVG_ARRIVAL_TIME", accArrivalTime / numberOfDepartures);
 		for (Server server : servers.servers)
 		{
-			System.out.printf("%-30s %-19s %.6f%%\n", "SERVER UTILIZATION", server.id, server.busyTime / lastEventTime);
-		}
-		System.out.println("----------------------------------------------------");
-		 */
-
-		var resp = new HashMap<String, Double>();
-		resp.put("NUMBER_OF_CUSTOMERS_SERVED", (double) numerOfDepartures);
-		resp.put("SIMULATION_RUN_LENGTH", (double) lastEventTime);
-		resp.put("NODE_THROUGHPUT", (double) numerOfDepartures / lastEventTime);
-		resp.put("MEAN_NUMBER_OF_CUSTOMERS_IN_THIS_NODE", (double) accCustomerInStation / lastEventTime);
-		resp.put("MEAN_NUMBER_OF_CUSTOMERS_IN_QUEUE", (double)  accQueueLen / lastEventTime);
-		resp.put("MEAN_NUMBER_OF_CUSTOMERS_SERVED", (double)  (accCustomerInStation - accQueueLen) / lastEventTime);
-		resp.put("MAX_NUMBER_OF_CUSTOMERS_IN_QUEUE", (double)  (accCustomerInStation - accQueueLen) / lastEventTime);
-		resp.put("AVG_QUEUE_TIME", (double) accQueueTime / numerOfDepartures);
-		resp.put("AVG_SERVICE_TIME", (double)  (accResponseTime - accQueueTime) / numerOfDepartures);
-		resp.put("AVG_RESPONSE_TIME", (double) accResponseTime / numerOfDepartures);
-		resp.put("AVG_ARRIVAL_TIME", (double) accArrivalTime / numerOfDepartures);
-		for (Server server : servers.servers)
-		{
-			resp.put("SERVER_UTILIZATION_" + server.id, (double) server.busyTime / lastEventTime);
+			resp.put("SERVER_UTILIZATION_" + server.id, server.busyTime / lastEventTime);
 		}
 		return resp;
 	}
@@ -225,7 +197,7 @@ public class Queue extends Node
 
 	private class Server
 	{
-		private int id;
+		private final int id;
 		private int busy = 0;
 		private double busyTime = 0.0;
 

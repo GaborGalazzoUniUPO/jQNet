@@ -1,33 +1,34 @@
-package uniupo.valpre.bcnnsim;
+package uniupo.valpre.bcnnsim.sim;
 
 import me.tongfei.progressbar.ProgressBar;
-import me.tongfei.progressbar.ProgressBarBuilder;
-import me.tongfei.progressbar.ProgressBarStyle;
 import uniupo.valpre.bcnnsim.network.QueueNetwork;
 import uniupo.valpre.bcnnsim.network.classes.ClosedCustomerClass;
 import uniupo.valpre.bcnnsim.network.classes.CustomerClass;
 import uniupo.valpre.bcnnsim.network.classes.OpenCustomerClass;
+import uniupo.valpre.bcnnsim.network.event.ArrivalEvent;
+import uniupo.valpre.bcnnsim.network.event.DepartureEvent;
+import uniupo.valpre.bcnnsim.network.event.Event;
 import uniupo.valpre.bcnnsim.network.node.*;
 import uniupo.valpre.bcnnsim.random.LehmerGenerator;
 import uniupo.valpre.bcnnsim.random.MultipleLehmerStreamGenerator;
 import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Simulator {
-	private MultipleLehmerStreamGenerator streamsGenerator = new MultipleLehmerStreamGenerator();
-	private List<RandomGenerator> streams = streamsGenerator.generateStreams(LehmerGenerator.DEFAULT_SEED);
-	private HashMap<String, RandomGenerator> activityStreams = new HashMap<>();
-	private HashMap<String, RandomGenerator> routingStreams = new HashMap<>();
+	private final MultipleLehmerStreamGenerator streamsGenerator = new MultipleLehmerStreamGenerator();
+	private final List<RandomGenerator> streams = streamsGenerator.generateStreams(LehmerGenerator.DEFAULT_SEED);
+	private final HashMap<String, RandomGenerator> activityStreams = new HashMap<>();
+	private final HashMap<String, RandomGenerator> routingStreams = new HashMap<>();
 	private int usedStreams = 0;
+	private ArrayList<NetworkReport> allReports = new ArrayList<>();
 
 
-	public void runSimulation(QueueNetwork originalNetwork, int numRuns, String referenceStation, long maxNumOfDeparture) {
+	public MultiRunNetworkReport runSimulation(QueueNetwork originalNetwork, int numRuns, String referenceStation, long maxNumOfDeparture) {
 		var progressBar = new ProgressBar("Job", maxNumOfDeparture * numRuns);
 		var reports = IntStream.range(0, numRuns).parallel().mapToObj(num -> {
 			boolean ended = false;
@@ -59,13 +60,14 @@ public class Simulator {
 						progressBar.step();
 					}
 				}
-				var departures = network.getNode(referenceStation).getNumerOfDepartures();
+				var departures = network.getNode(referenceStation).getNumberOfDepartures();
 				ended = departures > maxNumOfDeparture;
 			}
-			return network.generateReport();
+			return network.generateNetworkReport();
 		}).toList();
+		allReports.addAll(reports);
 		progressBar.close();
-		reports.forEach(System.out::println);
+		return new MultiRunNetworkReport(numRuns, allReports);
 	}
 
 	private RandomGenerator getRoutingStream(Node referenceStation) {

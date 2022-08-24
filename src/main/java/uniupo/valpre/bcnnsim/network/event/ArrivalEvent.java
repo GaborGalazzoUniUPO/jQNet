@@ -1,4 +1,4 @@
-package uniupo.valpre.bcnnsim;
+package uniupo.valpre.bcnnsim.network.event;
 
 import uniupo.valpre.bcnnsim.network.classes.CustomerClass;
 import uniupo.valpre.bcnnsim.network.node.Node;

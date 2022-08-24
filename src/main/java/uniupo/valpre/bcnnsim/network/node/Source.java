@@ -1,15 +1,14 @@
 package uniupo.valpre.bcnnsim.network.node;
 
 import com.google.gson.JsonObject;
-import uniupo.valpre.bcnnsim.ArrivalEvent;
-import uniupo.valpre.bcnnsim.Event;
-import uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy;
+import uniupo.valpre.bcnnsim.network.event.ArrivalEvent;
+import uniupo.valpre.bcnnsim.network.event.DepartureEvent;
+import uniupo.valpre.bcnnsim.network.event.Event;
 import uniupo.valpre.bcnnsim.network.routing.RoutingStrategy;
 import uniupo.valpre.bcnnsim.random.RandomGenerator;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class Source extends Node
 {
@@ -33,6 +32,8 @@ public class Source extends Node
 	public List<Event> manageEvent(Event event, RandomGenerator activityStream, RandomGenerator routingStream)
 	{
 		if(event instanceof ArrivalEvent e){
+			numberOfDepartures++;
+			numberOfArrivals++;
 			return List.of(
 					new ArrivalEvent(getRoutingStrategy().choose(getOutputs(), routingStream),e.getCustomerClass(), e.getTime()),
 					new ArrivalEvent(this, e.getCustomerClass(),e.getTime() +  getServiceTimeDistribution(e.getCustomerClass()).generate(activityStream))

@@ -1,11 +1,12 @@
 package uniupo.valpre.bcnnsim.network.node;
 
 import com.google.gson.JsonObject;
-import uniupo.valpre.bcnnsim.ArrivalEvent;
-import uniupo.valpre.bcnnsim.DepartureEvent;
-import uniupo.valpre.bcnnsim.Event;
+import uniupo.valpre.bcnnsim.network.event.ArrivalEvent;
+import uniupo.valpre.bcnnsim.network.event.DepartureEvent;
+import uniupo.valpre.bcnnsim.network.event.Event;
 import uniupo.valpre.bcnnsim.network.routing.RoutingStrategy;
 import uniupo.valpre.bcnnsim.random.RandomGenerator;
+import uniupo.valpre.bcnnsim.sim.NodeReport;
 
 import java.util.*;
 
@@ -39,6 +40,7 @@ public class Delay extends Node
 		var futureEvents = new ArrayList<Event>();
 		if (event instanceof ArrivalEvent e)
 		{
+			numberOfArrivals++;
 			accArrivalTime += e.getTime() - lastEventTime;
 			busyServerCount++;
 			futureEvents.add(
@@ -53,7 +55,7 @@ public class Delay extends Node
 		{
 			accDelayTime += e.getTime() - e.getArrivalTime();
 			busyServerCount--;
-			numerOfDepartures++;
+			numberOfDepartures++;
 
 			futureEvents.add(
 					new ArrivalEvent(
@@ -67,33 +69,14 @@ public class Delay extends Node
 	}
 
 	@Override
-	public Map<String, Double> generateReport()
+	public NodeReport generateNodeReport()
 	{
-
-		/*
-		System.out.println("----------------------------------------------------");
-		System.out.printf("REPORT FOR Delay '%s'\n", getName());
-		getServiceTimeDistributions().forEach(e -> {
-			System.out.printf("%-30s class: %-12s %s\n", "Service time distribution", e.getKey() , e.getValue().toString());
-		});
-		System.out.println();
-		System.out.println();
-		System.out.printf("%-50s %d cus\n", "NUMBER OF CUSTOMERS SERVED", numerOfDepartures);
-		System.out.printf("%-50s %.4f min\n", "SIMULATION RUN LENGTH ", lastEventTime);
-		System.out.printf("%-50s %.4f cus/min\n", "NODE THROUGHPUT ", numerOfDepartures / lastEventTime);
-		System.out.printf("%-50s %.6f\n", "MEAN NUMBER OF CUSTOMERS IN THIS NODE", accCustomerInStation / lastEventTime);
-		System.out.printf("%-50s %.2f min\n", "AVG DELAY TIME ", accDelayTime / numerOfDepartures);
-		System.out.printf("%-50s %.2f min\n", "AVG ARRIVAL TIME ", accArrivalTime / numerOfDepartures);
-		System.out.println("----------------------------------------------------");*/
-		var resp = new HashMap<String, Double>();
-		resp.put("NUMBER_OF_CUSTOMERS_SERVED", (double) numerOfDepartures);
-		resp.put("SIMULATION_RUN_LENGTH", (double) lastEventTime);
-		resp.put("NODE_THROUGHPUT", (double) numerOfDepartures / lastEventTime);
-		resp.put("MEAN_NUMBER_OF_CUSTOMERS_IN_THIS_NODE", (double) accCustomerInStation / lastEventTime);
-		resp.put("AVG_DELAY_TIME", (double) accDelayTime / numerOfDepartures);
-		resp.put("AVG_ARRIVAL_TIME", (double) accArrivalTime / numerOfDepartures);
+		var resp = super.generateNodeReport();
+		resp.put("SIMULATION_RUN_LENGTH", lastEventTime, true);
+		resp.put("NODE_THROUGHPUT", (double) numberOfDepartures / lastEventTime);
+		resp.put("MEAN_NUMBER_OF_CUSTOMERS_IN_THIS_NODE", accCustomerInStation / lastEventTime);
+		resp.put("AVG_DELAY_TIME", accDelayTime / numberOfDepartures);
+		resp.put("AVG_ARRIVAL_TIME", accArrivalTime / numberOfDepartures);
 		return resp;
-
-
 	}
 }

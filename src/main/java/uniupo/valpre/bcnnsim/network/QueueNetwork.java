@@ -7,12 +7,12 @@ import uniupo.valpre.bcnnsim.network.classes.CustomerClass;
 import uniupo.valpre.bcnnsim.network.node.Node;
 import uniupo.valpre.bcnnsim.random.distribution.Distribution;
 import uniupo.valpre.bcnnsim.serializer.JsonSerializable;
+import uniupo.valpre.bcnnsim.sim.NetworkReport;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 public class QueueNetwork extends JsonSerializable {
 	private final HashMap<String, Node> nodes = new HashMap<String, Node>();
@@ -74,12 +74,12 @@ public class QueueNetwork extends JsonSerializable {
 		return addedClasses;
 	}
 
-	public Map<String, Map<String, Double>> generateReport() {
-		var resp = new HashMap<String, Map<String, Double>>();
+	public NetworkReport generateNetworkReport() {
+		NetworkReport networkReport = new NetworkReport();
 		for (Node value : nodes.values()) {
-			resp.put(value.getName(),value.generateReport());
+			networkReport.put(value.getName(),value.generateNodeReport());
 		}
-		return resp;
+		return networkReport;
 	}
 
 	public static class Builder {

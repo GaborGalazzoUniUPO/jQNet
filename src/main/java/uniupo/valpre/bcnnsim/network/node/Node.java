@@ -3,13 +3,14 @@ package uniupo.valpre.bcnnsim.network.node;
 
 import com.google.gson.JsonObject;
 import lombok.SneakyThrows;
-import uniupo.valpre.bcnnsim.Event;
+import uniupo.valpre.bcnnsim.network.event.Event;
 import uniupo.valpre.bcnnsim.Utils;
 import uniupo.valpre.bcnnsim.network.classes.CustomerClass;
 import uniupo.valpre.bcnnsim.network.routing.RoutingStrategy;
 import uniupo.valpre.bcnnsim.random.distribution.Distribution;
 import uniupo.valpre.bcnnsim.random.RandomGenerator;
 import uniupo.valpre.bcnnsim.serializer.JsonSerializable;
+import uniupo.valpre.bcnnsim.sim.NodeReport;
 
 import java.util.*;
 
@@ -19,7 +20,8 @@ public abstract class Node extends JsonSerializable {
 	private final HashMap<String, Node> outputs = new HashMap<>();
 	private final RoutingStrategy routingStrategy;
 	private final HashMap<String, Distribution> serviceTimeDistributions = new HashMap<>();
-	protected long numerOfDepartures = 0;
+	protected long numberOfDepartures = 0;
+	protected long numberOfArrivals = 0;
 
 	public Node(String name, RoutingStrategy routingStrategy) {
 		this.name = name;
@@ -93,12 +95,19 @@ public abstract class Node extends JsonSerializable {
 		return routingStrategy;
 	}
 
-	public Map<String, Double> generateReport() {
-		return new HashMap<>();
+	public NodeReport generateNodeReport() {
+		var resp = new NodeReport();
+		resp.put("NUMBER_OF_CUSTOMERS_SERVED", (double) numberOfDepartures);
+		resp.put("NUMBER_OF_CUSTOMERS_ARRIVED", (double) numberOfArrivals);
+		return resp;
 	}
 
-	public long getNumerOfDepartures() {
-		return numerOfDepartures;
+	public long getNumberOfDepartures() {
+		return numberOfDepartures;
+	}
+
+	public long getNumberOfArrivals() {
+		return numberOfArrivals;
 	}
 
 	public JsonObject jsonSerialize() {
@@ -114,4 +123,6 @@ public abstract class Node extends JsonSerializable {
 		this.name = json.get("name").getAsString();
 		this.routingStrategy = (RoutingStrategy) Utils.deserializeJson(json, "routingStrategy", memory);
 	}
+
+
 }
