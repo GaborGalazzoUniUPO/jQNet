@@ -42,6 +42,10 @@ test {
 mainClassName = "uniupo.valpre.bcnnsim.Main"
 
 jar {
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+
     manifest {
         attributes "Main-Class": "$mainClassName"
     }
