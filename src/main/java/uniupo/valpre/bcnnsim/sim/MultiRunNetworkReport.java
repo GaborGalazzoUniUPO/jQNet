@@ -31,23 +31,6 @@ public class MultiRunNetworkReport {
 			}
 		}
 
-		/*
-		for (Map.Entry<String, HashMap<String, ValueStream>> e : all.entrySet()) {
-			outputStream.accept(e.getKey());
-			outputStream.accept("");
-			for (Map.Entry<String, ValueStream> stringValueStreamEntry : e.getValue().entrySet()) {
-				var ms = stringValueStreamEntry.getValue().getMetricStatistics(alphaLevel, a, precision);
-				var s = String.format("mean:%10.3f     sd:%10.3f    ci:%10.3f    mss:%13d    aa:%5s    lv:%10.3f",
-						ms.mean(),
-						ms.sd(),
-						ms.tc(),
-						ms.mss(),
-						((ms.mss() == null || ms.mss() < reports.size()) ? "\033[0;32m OK " : "\033[0;31m NO") + "\033[0m",
-						ms.lv());
-				outputStream.accept(String.format("%50s   %50s%n", stringValueStreamEntry.getKey(), s));
-			}
-
-		}*/
 		return all;
 
 	}
