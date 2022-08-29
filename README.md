@@ -1,7 +1,7 @@
 # QNetSim - Simulatore di Reti di Code
 ### Gabor Galazzo | Valutazione Delle Prestazioni | UPO | 2022/23
 
-![](./doc/img/Immagine 2022-08-29 141957.png)
+![none](./doc/img/Immagine 2022-08-29 141957.png)
 
 QNetSim è uno strumento di simulazione e valutazione di metriche per reti di code realizzato come parte di laboratorio del corso di Valutazione delle Prestazioni presso l'università degli studi del Piemonte Orientale a.a. 2022/23
 
