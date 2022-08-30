@@ -419,5 +419,7 @@ l'indicatore di progresso e terminazione"
 
 @enduml
 ```
-La procedura di simulazione è implementata nella classe [Simulator](src/main/java/uniupo/valpre/bcnnsim/sim/Simulator.java)
-e poi nelle varie implementazioni del metodo **manageEvent(Event e)** dei nodi
+La procedura di simulazione è implementata nella classe [Simulator](https://github.com/GaborGalazzoUniUPO/jQNet/blob/98a4409a461de6922f50f46f01fd1184a295e2af/src/main/java/uniupo/valpre/bcnnsim/sim/Simulator.java#L35)
+e poi nelle varie implementazioni del metodo **manageEvent(Event e)** dei [nodi](https://github.com/GaborGalazzoUniUPO/jQNet/blob/98a4409a461de6922f50f46f01fd1184a295e2af/src/main/java/uniupo/valpre/bcnnsim/network/node/Queue.java#L54) 
+
+## Confronto con Java Modeling Tool
