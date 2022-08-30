@@ -1,11 +1,8 @@
 package uniupo.valpre.bcnnsim.sim;
 
-import uniupo.valpre.bcnnsim.random.Student;
+import uniupo.valpre.bcnnsim.random.StudentUtils;
 
-import java.io.PrintStream;
-import java.io.Writer;
 import java.util.*;
-import java.util.function.Consumer;
 
 public class MultiRunNetworkReport {
 	private final int runs;
@@ -55,7 +52,7 @@ public class MultiRunNetworkReport {
 			}
 
 			var stdevOfMean = stdev / Math.sqrt(values.size() - 1);
-			var tCritical = Student.getInstance().idfStudent(values.size() - 1, (1 + alphaLevel) * 0.5);
+			var tCritical = StudentUtils.getInstance().idfStudent(values.size() - 1, (1 + alphaLevel) * 0.5);
 			var tc = tCritical * stdevOfMean;
 
 			var mss = 0;

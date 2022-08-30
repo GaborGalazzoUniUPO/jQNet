@@ -53,23 +53,36 @@ public class Queue extends Node
 	@Override
 	public List<Event> manageEvent(Event event, RandomGenerator activityStream, RandomGenerator routingStream)
 	{
+		// Aggiorno gli Accumulatori
 		servers.updateBusyTime((event.getTime() - lastEventTime));
 		accQueueLen += (customerQueue.size())* (event.getTime() - lastEventTime);
 		accCustomerInStation += ( customerQueue.size() + servers.busyCount())* (event.getTime() - lastEventTime);
+
 		if (customerQueue.size() > maxQueueLen)
 		{
 			maxQueueLen = customerQueue.size();
 		}
+
 		var futureEvents = new ArrayList<Event>();
+
+		// Evento Di arrivo
 		if (event instanceof ArrivalEvent e)
 		{
+			// Aggiorno gli accumulatori specifici
 			numberOfArrivals++;
 			accArrivalTime += e.getTime() - lastEventTime;
+
+			// Aggiungo il cliente alla coda
 			var customer = new Customer(e);
 			customerQueue.add(customer);
+
+			// Se ci sono server disponibili
 			if (servers.hasAvailable())
 			{
+				// assegno ai server il primo della coda
 				var server = servers.assignCustomer(customerQueue.poll());
+
+				// aggiungo come evento futuro l'evento di fine servizio (Partenza dalla coda)
 				futureEvents.add(
 						new DepartureEvent(
 								this,
@@ -79,9 +92,13 @@ public class Queue extends Node
 								e.getTime() + getServiceTimeDistribution(e.getCustomerClass()).generate(activityStream))
 				);
 			}
-		} else if (event instanceof DepartureEvent e)
+		}
+		// Evento di Fine Servizio (Partenza)
+		else if (event instanceof DepartureEvent e)
 		{
+			// Rilascio un servitore
 			servers.freeServer(e.getServerId());
+			// Se ci sono dei clienti in coda li servo come sopra
 			if (!customerQueue.isEmpty())
 			{
 				var customer = customerQueue.poll();
@@ -94,12 +111,15 @@ public class Queue extends Node
 								customer.arrivalEvent.getTime(),
 								e.getTime() + getServiceTimeDistribution(e.getCustomerClass()).generate(activityStream))
 				);
+				// Aggiorno gli accumulatori specifici
 				accQueueTime += e.getTime() - customer.getArrivalEvent().getTime();
 			}
 
+			// Aggiorno gli accumulatori specifici
 			accResponseTime += e.getTime() - e.getArrivalTime();
 			numberOfDepartures++;
 
+			// Aggiungo l'evento di arrivo alla stazione sucessiva
 			futureEvents.add(
 					new ArrivalEvent(
 							getRoutingStrategy().choose(getOutputs(), routingStream),

@@ -7,7 +7,7 @@ import uniupo.valpre.bcnnsim.network.node.Node;
 
 @AllArgsConstructor
 @Getter
-public class Event implements Comparable<Event>
+public abstract class Event implements Comparable<Event>
 {
 	private final Node referenceStation;
 	private final CustomerClass customerClass;
