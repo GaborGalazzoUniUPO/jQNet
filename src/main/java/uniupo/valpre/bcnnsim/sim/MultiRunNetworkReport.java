@@ -44,7 +44,7 @@ public class MultiRunNetworkReport {
 
 			var sum = values.stream().reduce(Double::sum).orElseThrow();
 			var mean = sum / values.size();
-			sum = values.stream().reduce((a, v) -> Math.pow(v - mean, 2) + a).orElseThrow();
+			sum = values.stream().reduce(0.0, (a, v) -> Math.pow(v - mean, 2) + a);
 			var stdev = Math.sqrt(sum / (float) (values.size() - 1));
 
 			if (isAbsolute) {
@@ -72,6 +72,10 @@ public class MultiRunNetworkReport {
 
 		public void setAbsolute(boolean absolute) {
 			isAbsolute = absolute;
+		}
+
+		public List<Double> getValues() {
+			return values;
 		}
 	}
 

@@ -139,7 +139,7 @@ public class Queue extends Node
 		resp.put("MEAN_NUMBER_OF_CUSTOMERS_IN_THIS_NODE", accCustomerInStation / lastEventTime);
 		resp.put("MEAN_NUMBER_OF_CUSTOMERS_IN_QUEUE", accQueueLen / lastEventTime);
 		resp.put("MEAN_NUMBER_OF_CUSTOMERS_SERVED", (accCustomerInStation - accQueueLen) / lastEventTime);
-		resp.put("MAX_NUMBER_OF_CUSTOMERS_IN_QUEUE", (accCustomerInStation - accQueueLen) / lastEventTime);
+		resp.put("MAX_NUMBER_OF_CUSTOMERS_IN_QUEUE", maxQueueLen);
 		resp.put("AVG_QUEUE_TIME", accQueueTime / numberOfDepartures);
 		resp.put("AVG_SERVICE_TIME", (accResponseTime - accQueueTime) / numberOfDepartures);
 		resp.put("AVG_RESPONSE_TIME", accResponseTime / numberOfDepartures);

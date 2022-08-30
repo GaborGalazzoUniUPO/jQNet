@@ -6,16 +6,8 @@
       "class": "c",
       "distribution": {
         "class": "uniupo.valpre.bcnnsim.random.distribution.PositiveNormalDistribution",
-        "mean": 3.2,
-        "sigma": 0.6
-      }
-    },
-    {
-      "node": "source",
-      "class": "c",
-      "distribution": {
-        "class": "uniupo.valpre.bcnnsim.random.distribution.ExponentialDistribution",
-        "mean": 4.2
+        "mean": 1.6,
+        "sigma": 0.4
       }
     }
   ],
@@ -35,7 +27,7 @@
       "routingStrategy": {
         "class": "uniupo.valpre.bcnnsim.network.routing.RandomRoutingStrategy"
       },
-      "numServer": 2
+      "numServer": 3
     },
     {
       "class": "uniupo.valpre.bcnnsim.network.node.Sink",
@@ -57,7 +49,7 @@
       "referenceStation": "source",
       "interArrivalTimeDistribution": {
         "class": "uniupo.valpre.bcnnsim.random.distribution.ExponentialDistribution",
-        "mean": 1.0
+        "mean": 1.5
       }
     }
   ]

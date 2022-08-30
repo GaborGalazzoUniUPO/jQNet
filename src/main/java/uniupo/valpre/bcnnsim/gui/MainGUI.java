@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -147,7 +148,7 @@ public class MainGUI {
 					DefaultTableModel model = new DefaultTableModel(new String[]{"Node", "Metrics", "Mean", "SD", "Coefficient", "Min Runs", "AccuracyReached"}, 0);
 					endSym.set(true);
 					for (Map.Entry<String, HashMap<String, MultiRunNetworkReport.ValueStream>> en : accReport.entrySet()) {
-						for (Map.Entry<String, MultiRunNetworkReport.ValueStream> ee : en.getValue().entrySet()) {
+						for (Map.Entry<String, MultiRunNetworkReport.ValueStream> ee : en.getValue().entrySet().stream().sorted(Comparator.comparing(Map.Entry::getKey)).toList()) {
 							var m = ee.getValue().getMetricStatistics(((double) accuracyField.getValue()),
 									absoluteRadioButton.isSelected() ? MultiRunNetworkReport.PrecisionType.Absolute : MultiRunNetworkReport.PrecisionType.Relative,
 									((double) precisionField.getValue()));

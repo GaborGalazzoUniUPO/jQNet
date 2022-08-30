@@ -6,8 +6,8 @@
       "class": "c",
       "distribution": {
         "class": "uniupo.valpre.bcnnsim.random.distribution.PositiveNormalDistribution",
-        "mean": 3.2,
-        "sigma": 0.6
+        "mean": 1.6,
+        "sigma": 0.4
       }
     },
     {
@@ -15,8 +15,8 @@
       "class": "c",
       "distribution": {
         "class": "uniupo.valpre.bcnnsim.random.distribution.PositiveNormalDistribution",
-        "mean": 3.2,
-        "sigma": 0.6
+        "mean": 1.6,
+        "sigma": 0.4
       }
     },
     {
@@ -24,7 +24,7 @@
       "class": "c",
       "distribution": {
         "class": "uniupo.valpre.bcnnsim.random.distribution.ExponentialDistribution",
-        "mean": 4.2
+        "mean": 1.5
       }
     }
   ],
@@ -63,8 +63,8 @@
       "routingStrategy": {
         "class": "uniupo.valpre.bcnnsim.network.routing.ProbabilityRoutingStrategy",
         "probabilities": {
-          "q2": 0.3,
-          "q1": 0.7
+          "q2": 0.6,
+          "q1": 0.4
         }
       }
     }
@@ -73,7 +73,7 @@
     {
       "class": "uniupo.valpre.bcnnsim.network.classes.ClosedCustomerClass",
       "name": "c",
-      "numCustomer": 10,
+      "numCustomer": 100,
       "priority": 0,
       "referenceStation": "delay"
     }

@@ -1,6 +1,8 @@
 package uniupo.valpre.bcnnsim.network.node;
 
 import com.google.gson.JsonObject;
+import uniupo.valpre.bcnnsim.network.classes.ClosedCustomerClass;
+import uniupo.valpre.bcnnsim.network.classes.OpenCustomerClass;
 import uniupo.valpre.bcnnsim.network.event.ArrivalEvent;
 import uniupo.valpre.bcnnsim.network.event.DepartureEvent;
 import uniupo.valpre.bcnnsim.network.event.Event;
@@ -34,9 +36,10 @@ public class Source extends Node
 		if(event instanceof ArrivalEvent e){
 			numberOfDepartures++;
 			numberOfArrivals++;
+
 			return List.of(
 					new ArrivalEvent(getRoutingStrategy().choose(getOutputs(), routingStream),e.getCustomerClass(), e.getTime()),
-					new ArrivalEvent(this, e.getCustomerClass(),e.getTime() +  getServiceTimeDistribution(e.getCustomerClass()).generate(activityStream))
+					new ArrivalEvent(this, e.getCustomerClass(),e.getTime() +  ((OpenCustomerClass) e.getCustomerClass()).getInterArrivalTimeDistribution().generate(activityStream))
 			);
 		}
 		return List.of();
