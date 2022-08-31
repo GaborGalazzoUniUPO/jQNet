@@ -1,0 +1,102 @@
+@startuml
+package uniupo.valpre.bcnnsim <<Frame>> {
+    package sim <<Frame>> {
+        class Simulator
+        class MultiRunNetworkReport
+        class NetworkReport
+        class NodeReport
+
+        Simulator --> MultiRunNetworkReport
+        MultiRunNetworkReport --* NetworkReport
+        NetworkReport --* NodeReport
+    }
+    package gui <<Frame>> {
+        class MainGUI
+        class ReportGUI
+        class NetworkVisualizer
+    }
+    class Main {
+    }
+
+    Main --> MainGUI
+    MainGUI --> ReportGUI
+    MainGUI --> NetworkVisualizer
+    MainGUI --> Simulator
+
+
+    package random <<Frame>> {
+        interface MultipleStreamGenerator
+        interface RandomGenerator
+
+        MultipleStreamGenerator --* RandomGenerator
+    }
+
+    package network <<Frame>> {
+        package classes <<Frame>> {
+            abstract CustomerClass
+            class ClosedCustomerClass
+            class OpenCustomerClass
+
+            ClosedCustomerClass --|> CustomerClass
+            OpenCustomerClass --|> CustomerClass
+
+
+        }
+        package event <<Frame>> {
+
+            abstract Event
+            class ArrivalEvent
+            class DepartureEvent
+
+            Event --|> ArrivalEvent
+            Event --|> DepartureEvent
+
+        }
+
+        package routing <<Frame>> {
+
+            abstract RoutingStrategy
+            class ProbabilityRoutingStrategy
+            class RandomRoutingStrategy
+
+            ProbabilityRoutingStrategy --|> RoutingStrategy
+            RandomRoutingStrategy --|> RoutingStrategy
+
+
+        }
+
+         package node <<Frame>> {
+
+            abstract Node
+            class Delay
+            class Queue
+            class Sink
+            class Source
+
+            Delay --|> Node
+            Queue --|> Node
+            Sink --|> Node
+            Source --|> Node
+
+
+            Node --> Event
+            Node --> RoutingStrategy
+            Node --> CustomerClass
+            Node --> RandomGenerator
+
+        }
+
+
+
+        class QueueNetwork
+        QueueNetwork --> CustomerClass
+        QueueNetwork --> Node
+        QueueNetwork --> RandomGenerator
+        QueueNetwork --> MultipleStreamGenerator
+
+        MainGUI --> QueueNetwork
+        Simulator --> QueueNetwork
+    }
+
+}
+@enduml

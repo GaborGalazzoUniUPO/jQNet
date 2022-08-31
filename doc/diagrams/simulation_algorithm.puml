@@ -1,0 +1,74 @@
+@startuml
+(*) --> "Load della rete da file e degli input"
+partition Simulator {
+ --> "runSimulation()"
+
+--> ===B1===
+--> "Creo una FEL"
+--> "Genero una Rete Pulita dal modello in input"
+--> "Per ogni classe di clienti
+aggiongo alla FEL gli eventi di
+arrivo sulla stazione di riferimento"
+--> "inizio simulazione"
+If "simulazione terminata" then
+--> [Yes] "Genero il REPORT per la simulazione"
+else
+--> "Estraggo un evento dalla FEL"
+--> "Ottengo la stazione (Nodo) di riferimento di quell'evento"
+
+partition Node {
+ --> "manageEvent()"
+ --> "Aggiorno gli accumulatori generici"
+ If "L'evento è un arrivo" then
+ --> [Yes] "Gestisco Arrivo"
+ --> "Aggiorno gli accumulatori specifici"
+ --> "Aggiungo il cliente alla coda"
+     If "Ci sono dei servitori liberi" then
+     --> [Yes] Assegno il cliente ad un servitore
+     --> Genero l'evento di fine Servizio
+     --> "Aggiorno il tempo
+     di Simulazione"
+     else
+     --> "Aggiorno il tempo
+     di Simulazione"
+     EndIf
+ else
+ --> [Partenza] "Gestisco la partenza"
+ --> "Libero un servitore"
+ If "C'è un cliente in coda" then
+ --> [Yes]  Assegno il primo cliente ad un servitore
+ --> Genero l'evento di fine servizio
+ --> Aggiorno l'accumulatore del tempo di coda
+ --> "Aggiorno gli acccumulatori Specifici"
+ else
+ --> "Aggiorno gli acccumulatori Specifici"
+ EndIf
+ --> "Genero l'evento di arrivo
+ alla stazione sucessiva"
+ Endif
+ --> "Aggiorno il tempo
+ di Simulazione"
+ --> "Restituisco gli eventi
+ da aggiungere nella FEL"
+
+
+
+
+
+}
+--> "Aggiungo alla FEL gli eventi generati"
+--> "Se l'evento era una Partenza aggiorno
+l'indicatore di progresso e terminazione"
+
+
+-down-> "inizio simulazione"
+
+
+"Genero il REPORT per la simulazione" --> ===B2===
+
+===B1=== --> "..."
+
+--> ===B2===
+}
+--> (*)
+@enduml

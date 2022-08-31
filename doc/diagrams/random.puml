@@ -1,0 +1,58 @@
+@startuml
+package uniupo.valpre.bcnnsim.random <<Frame>> {
+    interface RandomGenerator
+    interface MultipleStreamGenerator
+
+    class LehmerGenerator
+    class MultipleLehmerStreamGenerator
+
+    LehmerGenerator --|> RandomGenerator
+    MultipleLehmerStreamGenerator --|> MultipleStreamGenerator
+
+    MultipleStreamGenerator --> RandomGenerator
+    MultipleLehmerStreamGenerator --> LehmerGenerator
+
+    package distribution <<Frame>> {
+
+
+        class BernoulliDistribution
+        class BinomialDistribution
+        class ChiSquareDistribution
+        class EquilikelyDistribution
+        class ErlangDistribution
+        class ExponentialDistribution
+        class GeometricDistribution
+        class HyperExponentialDistribution
+        class LogNormalDistribution
+        class NormalDistribution
+        class PositiveNormalDistribution
+        class StudentDistribution
+        class UniformDistribution
+
+        BernoulliDistribution -down-|> Distribution
+        BinomialDistribution -down-|> Distribution
+        ChiSquareDistribution -down-|> Distribution
+        EquilikelyDistribution -down-|> Distribution
+        ErlangDistribution -left-|> Distribution
+        ExponentialDistribution -left-|> Distribution
+        GeometricDistribution -left-|> Distribution
+        HyperExponentialDistribution -left-|> Distribution
+        LogNormalDistribution -up-> Distribution
+        NormalDistribution -up-|> Distribution
+        PositiveNormalDistribution -up-|> Distribution
+        StudentDistribution -up-|> Distribution
+        UniformDistribution -up-|> Distribution
+
+         abstract Distribution {
+            method generate(RandomGenerator)
+        }
+
+        Distribution -> RandomGenerator
+
+
+
+
+
+    }
+}
+@enduml

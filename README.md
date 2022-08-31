@@ -132,112 +132,8 @@ un oggetto json.
 
 ## Scelte implementative
 
-### Package Diagram
-
-```plantuml
-@startuml
-package uniupo.valpre.bcnnsim <<Frame>> {
-    package sim <<Frame>> {
-        class Simulator
-        class MultiRunNetworkReport
-        class NetworkReport
-        class NodeReport
-        
-        Simulator --> MultiRunNetworkReport
-        MultiRunNetworkReport --* NetworkReport
-        NetworkReport --* NodeReport
-    }
-    package gui <<Frame>> {
-        class MainGUI
-        class ReportGUI
-        class NetworkVisualizer
-    }
-    class Main {
-    }
-    
-    Main --> MainGUI
-    MainGUI --> ReportGUI
-    MainGUI --> NetworkVisualizer
-    MainGUI --> Simulator
-   
-    
-    package random <<Frame>> {
-        interface MultipleStreamGenerator
-        interface RandomGenerator
-        
-        MultipleStreamGenerator --* RandomGenerator
-    }
-    
-    package network <<Frame>> {
-        package classes <<Frame>> {
-            abstract CustomerClass
-            class ClosedCustomerClass
-            class OpenCustomerClass
-            
-            ClosedCustomerClass --|> CustomerClass
-            OpenCustomerClass --|> CustomerClass
-            
-       
-        }
-        package event <<Frame>> {
-        
-            abstract Event
-            class ArrivalEvent
-            class DepartureEvent
-            
-            Event --|> ArrivalEvent
-            Event --|> DepartureEvent
-       
-        }
-       
-        package routing <<Frame>> {
-        
-            abstract RoutingStrategy
-            class ProbabilityRoutingStrategy
-            class RandomRoutingStrategy
-            
-            ProbabilityRoutingStrategy --|> RoutingStrategy
-            RandomRoutingStrategy --|> RoutingStrategy
-            
-       
-        }
-        
-         package node <<Frame>> {
-        
-            abstract Node
-            class Delay
-            class Queue
-            class Sink
-            class Source
-            
-            Delay --|> Node
-            Queue --|> Node
-            Sink --|> Node
-            Source --|> Node
-            
-            
-            Node --> Event
-            Node --> RoutingStrategy
-            Node --> CustomerClass
-            Node --> RandomGenerator
-       
-        }
-        
-      
-        
-        class QueueNetwork
-        QueueNetwork --> CustomerClass
-        QueueNetwork --> Node
-        QueueNetwork --> RandomGenerator
-        QueueNetwork --> MultipleStreamGenerator
-                
-        MainGUI --> QueueNetwork
-        Simulator --> QueueNetwork
-    }
-   
-}
-@enduml
-```
+### Package and Class Diagram
+![](http://www.plantuml.com/plantuml/uml/ZPNFJkCm4CRlUOgSaU09K2NKPH47_cmhk4_JsSggOqSJcnKBUNSIEzHnF4x9APhvUJxFPsVIG7M40vPM2TlegpUG3U7LhbAg5NLvVVsReCRLglmeolvfHfhB3KybeMtBhQYj1ADf5d-mqeYDLOze_cawRh3HP6RCOaxlSKoSCYUjyl9oTKQ1pVRhBZAg31TsC01TPCh1YWLJ7a2ekvVxMTGNI-EZzAjeBKZn7scY5-gD8fstmqMS2nEfyTt5Ox5fXfUR4k5CYwXf0hNN_6KGoY3zXGgzyOt4hI64-WuLKdGz0hbnvG8HdrrQmftAVD74a-zjAjyWkyzlnlcABSiC3-nQGr2PScrReskazR0WGlpHhALkSN-EUcfGnKm4CKNwPZzN2-f9HMv1KEaI1_0DbOdwvmsu7JYcfHiYqK-GNFeNDa364deW8bp8xpTRPSBaIdL5qXHfQuGw_A2jZIVxAmO63-zC1y-aTx0JKfZtyx2_bdCk0lFrV9jB8cnvVXdhJ_Ws-g7s0tU6sSSUgWIk-pyMBSTlXJfoOMsfmbZQbVOT9UAkV2OtIEHIJcQIZ1M7a1jtwUKxfPREv0JbFz9G9pVg-ZCg2iRCSKWNaGLZS44qmI9JaYmtJ5amDzJ3o9xyFjW6udztWlG-T5y0)
 ### Descrizioni
 #### gui
 Questo Package contiene i form grafici e le schemate di visualizzazione
@@ -256,66 +152,7 @@ Conitene i descrittori dei nodi della rete:
 ##### network.routing
 Contiene i descrittori delle strategie di Routing
 ## Gestione dei Generatori di Sequenza Casuali
-```plantuml
-@startuml
-package uniupo.valpre.bcnnsim.random <<Frame>> {
-    interface RandomGenerator
-    interface MultipleStreamGenerator
-    
-    class LehmerGenerator
-    class MultipleLehmerStreamGenerator
-    
-    LehmerGenerator --|> RandomGenerator
-    MultipleLehmerStreamGenerator --|> MultipleStreamGenerator
-    
-    MultipleStreamGenerator --> RandomGenerator
-    MultipleLehmerStreamGenerator --> LehmerGenerator
-
-    package distribution <<Frame>> {
-       
-        
-        class BernoulliDistribution
-        class BinomialDistribution
-        class ChiSquareDistribution
-        class EquilikelyDistribution
-        class ErlangDistribution
-        class ExponentialDistribution
-        class GeometricDistribution
-        class HyperExponentialDistribution
-        class LogNormalDistribution
-        class NormalDistribution
-        class PositiveNormalDistribution
-        class StudentDistribution
-        class UniformDistribution
-        
-        BernoulliDistribution -down-|> Distribution
-        BinomialDistribution -down-|> Distribution
-        ChiSquareDistribution -down-|> Distribution
-        EquilikelyDistribution -down-|> Distribution
-        ErlangDistribution -left-|> Distribution
-        ExponentialDistribution -left-|> Distribution
-        GeometricDistribution -left-|> Distribution
-        HyperExponentialDistribution -left-|> Distribution
-        LogNormalDistribution -up-> Distribution
-        NormalDistribution -up-|> Distribution
-        PositiveNormalDistribution -up-|> Distribution
-        StudentDistribution -up-|> Distribution
-        UniformDistribution -up-|> Distribution
-        
-         abstract Distribution {
-            method generate(RandomGenerator)
-        }
-        
-        Distribution -> RandomGenerator
-        
-        
-        
-        
-        
-    }
-}
-@enduml
-```
+![](http://www.plantuml.com/plantuml/uml/dPLBJiCm48RtdC9BMAGdgBBWLHO58IeEC4scwQX-rR4B5VJkcAIlf8wDyBBpVPDfvfUZeLX1XSn9SbgDDi2rmT6yaB8cCJ8WIoNOUFneG62UiwyhvWz9YsO11RAt1fYWH0DMcLxrsN5BckFC6eGpgi4A3dNDfhWKQBeDsif1RebWYvxCikmx3uuKxTLgqLa7Yjxyt_FoY__TQ7g_Z99gQsZkB2dPUVajTdf7jsYaSfpJ_PdHPqWgGS0ZoDsIPci71YFCmzeHfnNoRGmo76GL0pwraYXjV9u9Ae6-M4IOfwr6yxTsKrMzA2EYJ19uLJLPsc0Id5bN-f4YnBkaXU_I8Ov8SAKiAzM7_8rfi6renGabkFA44uv0Ihg81CiuBkom4DvfmWf69k748fHGWv5YcTFPW3103_KVJbjK2sGloWUI6EIF0eEv_naAswdlFmk7unUnL2MhsiiDhtitvCqHtfqQTqUul5MRqpgx7m00)
 ### Generazione di numeri casuali
 Per generare delle sequenza lunghe di numeri casuali si è utilizzato il generatore di **Lehmer** implementato cella classe 
 [LehmerGenerator](src/main/java/uniupo/valpre/bcnnsim/random/LehmerGenerator.java)
@@ -342,84 +179,120 @@ Le distribuzioni implementate sono
 
 ## Implementazione della Simulazione
 
-```plantuml
-@startuml
-(*) --> "Load della rete da file e degli input" 
-partition Simulator {
- --> "runSimulation()"
-
---> ===B1===
---> "Creo una FEL"
---> "Genero una Rete Pulita dal modello in input"
---> "Per ogni classe di clienti 
-aggiongo alla FEL gli eventi di 
-arrivo sulla stazione di riferimento"
---> "inizio simulazione"
-If "simulazione terminata" then
---> [Yes] "Genero il REPORT per la simulazione"
-else
---> "Estraggo un evento dalla FEL"
---> "Ottengo la stazione (Nodo) di riferimento di quell'evento"
-
-partition Node {
- --> "manageEvent()"
- --> "Aggiorno gli accumulatori generici"
- If "L'evento è un arrivo" then
- --> [Yes] "Gestisco Arrivo"
- --> "Aggiorno gli accumulatori specifici"
- --> "Aggiungo il cliente alla coda"
-     If "Ci sono dei servitori liberi" then
-     --> [Yes] Assegno il cliente ad un servitore
-     --> Genero l'evento di fine Servizio
-     --> "Aggiorno il tempo 
-     di Simulazione"
-     else
-     --> "Aggiorno il tempo 
-     di Simulazione"
-     EndIf
- else
- --> [Partenza] "Gestisco la partenza"
- --> "Libero un servitore"
- If "C'è un cliente in coda" then
- --> [Yes]  Assegno il primo cliente ad un servitore
- --> Genero l'evento di fine servizio
- --> Aggiorno l'accumulatore del tempo di coda
- --> "Aggiorno gli acccumulatori Specifici"
- else
- --> "Aggiorno gli acccumulatori Specifici"
- EndIf
- --> "Genero l'evento di arrivo 
- alla stazione sucessiva"
- Endif
- --> "Aggiorno il tempo 
- di Simulazione"
- --> "Restituisco gli eventi 
- da aggiungere nella FEL"
-
- 
- 
- 
- 
-}
---> "Aggiungo alla FEL gli eventi generati"
---> "Se l'evento era una Partenza aggiorno 
-l'indicatore di progresso e terminazione"
-
-
--down-> "inizio simulazione"
-
-
-"Genero il REPORT per la simulazione" --> ===B2===
-
-===B1=== --> "..."
-
---> ===B2===
-}
---> (*)
-
-@enduml
-```
+![](http://www.plantuml.com/plantuml/uml/dLNDZjCm4BxxAKQvj5rfLuBx8YshWbQgsAhbWX07Rp898wLsi9qYBU9zU0zUZ1dR-IbBOKKELJgUds--RpnPNgpWyl8L51khAwYmRJKu30YLXffQ17x3fYKWq_MXK9rsWG9P0tiwzAqEri4tbLAutcGZdozNXL9Ylhw-Vls2V-AVujQXXTveUBFU5Cdq5WswPDn9vMtVKj0Ce8M35KIMYm_rOyGM7TZ649IjzfuHoXkX2QHqqt3nneAMJhW827WyoY7xAUqS7ItuNevzq8_i7HCugj7HWVrihaA6-1HyR2dw5UgkXc9cW83kG4O7NK3uZ2O6Vlo0_jFO5hMmMs_lT--XOzHIT9uFMu-fsje7n-25XmJN2WFjdAZx451QcoDVlhELNVtMWFpzqZDpYvI9bPXqum0S9JjeenjSYvS8bemtmg4pDbAdoxBFGXCqqXELn9x2n2RdXvy_17RYDZC19rJuGBwqS9Cy_bd7TrXIdGgDhhtqpdGcgJ4fNDfAivCyWkYMOordh91Vq1qffclfWM4FmEIPmDtm03NcD74btGpXE4LaIGTQXUQQM8IzkB8Ua-VK6-SDUEZo6KViv_f7Ono2_mjTc-gkLZb3R6hBGgDvr7FQcQSkcmT2DqA9FUapYtgxI6eERF3TYoG_aNLENSUJPyyJ-3Vo_4YUU8tDjulPHCWIocJ4oyvupipGR8Zsio6Q27fkH6Pslg7cqDEigpI4ustqVOdUqr6d15Ihiv8-aJCwxaIoq4VLfiMbP1lhT0MGoJ0uBeRuV5Udb-HFkozUNTxCUPViSMg7xN7x3gCJImbSrIw8koYp1CGosyPnXnmphBuCdtTzPR-QStjJgMVjGnW-62_bWw66JqVYvkhgQlP9YHwfyUN5wXS0)
 La procedura di simulazione è implementata nella classe [Simulator](https://github.com/GaborGalazzoUniUPO/jQNet/blob/98a4409a461de6922f50f46f01fd1184a295e2af/src/main/java/uniupo/valpre/bcnnsim/sim/Simulator.java#L35)
 e poi nelle varie implementazioni del metodo **manageEvent(Event e)** dei [nodi](https://github.com/GaborGalazzoUniUPO/jQNet/blob/98a4409a461de6922f50f46f01fd1184a295e2af/src/main/java/uniupo/valpre/bcnnsim/network/node/Queue.java#L54) 
 
 ## Confronto con Java Modeling Tool
+### Modello 1
+![](doc/img/jmt/model_1_network.png)
+#### Risultati QNetSim
+
+| node   | metric                                        | mean                 | sd                   | h                     | runNeeded | accuracyReached |
+|--------|-----------------------------------------------|----------------------|----------------------|-----------------------|-----------|-----------------|
+| q1     | AVG_ARRIVAL_TIME                              | 0.8359918603321144   | 0.034661597211277845 | 0.006912261018648167  | 3         | true            |
+| q1     | AVG_QUEUE_TIME                                | 0.054508187095230795 | 0.011380061998124509 | 0.00226942683742921   | 69        | true            |
+| q1     | **(2) AVG_RESPONSE_TIME**                     | 1.6548613169709625   | 0.016777432905908347 | 0.0033457775982337636 | 1         | true            |
+| q1     | AVG_SERVICE_TIME                              | 1.600353129875731    | 0.012680609679604707 | 0.0025287837558883464 | 1         | true            |
+| q1     | MAX_NUMBER_OF_CUSTOMERS_IN_QUEUE              | 3.7                  | 0.8102873913406634   | 0.16158857062835547   | 76        | true            |
+| q1     | MEAN_NUMBER_OF_CUSTOMERS_IN_QUEUE             | 0.03656382255726413  | 0.008095437259305414 | 0.0016144026790029682 | 78        | true            |
+| q1     | **(1) MEAN_NUMBER_OF_CUSTOMERS_IN_THIS_NODE** | 1.1072750966131313   | 0.038189448783527216 | 0.007615789790095019  | 2         | true            |
+| q1     | MEAN_NUMBER_OF_CUSTOMERS_SERVED               | 1.0707112740558666   | 0.03360483898276484  | 0.006701520911533038  | 2         | true            |
+| q1     | **(2) NODE_THROUGHPUT**                       | 0.6686158151197819   | 0.020635501541602503 | 0.004115158688067121  | 2         | true            |
+| q1     | NUMBER_OF_CUSTOMERS_ARRIVED                   | 1002.13              | 1.1776967763264425   | 0.23485783038700211   | 1         | true            |
+| q1     | NUMBER_OF_CUSTOMERS_SERVED                    | 1001.0               | 0.0                  | 0.0                   | 0         | true            |
+| q1     | **(3) SERVER_UTILIZATION_0**                  | 0.35670749593602763  | 0.011818366449446047 | 0.0023568340839765236 | 2         | true            |
+| q1     | **(3) SERVER_UTILIZATION_1**                  | 0.3571333333253587   | 0.011906676660536405 | 0.0023744450216937807 | 2         | true            |
+| q1     | **(3) SERVER_UTILIZATION_2**                  | 0.3568704447944804   | 0.011710291297019698 | 0.0023352815958252266 | 2         | true            |
+| q1     | SIMULATION_RUN_LENGTH                         | 1498.5460019007285   | 46.62676880604038    |                       |           | true            |
+| sink   | NUMBER_OF_CUSTOMERS_ARRIVED                   | 1000.0               | 0.0                  | 0.0                   | 0         | true            |
+| sink   | NUMBER_OF_CUSTOMERS_SERVED                    | 1000.0               | 0.0                  | 0.0                   | 0         | true            |
+| source | NUMBER_OF_CUSTOMERS_ARRIVED                   | 1002.13              | 1.1776967763264425   | 0.23485783038700211   | 1         | true            |
+| source | NUMBER_OF_CUSTOMERS_SERVED                    | 1002.13              | 1.1776967763264425   | 0.23485783038700211   | 1         | false           |
+
+#### Risultati JMT
+1. ![ciao](doc/img/jmt/model_1_noc.png)
+2. ![](doc/img/jmt/model_1_rst.png)
+3. ![](doc/img/jmt/model_1_tro.png)
+4. ![](doc/img/jmt/model_1_u.png)
+
+## Model2
+![](doc/img/jmt/model_2_network.png)
+### Risultati QNetSim
+| node  | metric                                        | mean               | sd                    | h                     | runNeeded | accuracyReached |
+|-------|-----------------------------------------------|--------------------|-----------------------|-----------------------|-----------|-----------------|
+| q1    | AVG_ARRIVAL_TIME                              | 0.3306857561258932 | 0.002514597341384426  | 6.637623686458647E-4  | 1         | true            |
+| q1    | **(2) AVG_QUEUE_TIME**                        | 76.60787384107893  | 0.18639335091945777   | 0.04920107488780845   | 1         | true            |
+| q1    | **(3) AVG_RESPONSE_TIME**                     | 78.19406663550602  | 0.19020469989093192   | 0.05020713258913762   | 1         | true            |
+| q1    | AVG_SERVICE_TIME                              | 1.586192794427123  | 0.003829442839691542  | 0.0010108338253742766 | 1         | true            |
+| q1    | MAX_NUMBER_OF_CUSTOMERS_IN_QUEUE              | 98.0               | 0.0                   | 0.0                   | 0         | true            |
+| q1    | MEAN_NUMBER_OF_CUSTOMERS_IN_QUEUE             | 96.11457361252069  | 0.018422431673610865  | 0.0048628528642125635 | 1         | true            |
+| q1    | **(1) MEAN_NUMBER_OF_CUSTOMERS_IN_THIS_NODE** | 98.1145685792136   | 0.018422811955522346  | 0.00486295324482546   | 1         | true            |
+| q1    | MEAN_NUMBER_OF_CUSTOMERS_SERVED               | 1.9999949666929109 | 3.964376969851272E-6  | 1.0464515349661756E-6 | 1         | true            |
+| q1    | **(4) NODE_THROUGHPUT**                       | 1.2486747239485605 | 0.0029834722432685733 | 7.87528313336586E-4   | 1         | true            |
+| q1    | NUMBER_OF_CUSTOMERS_ARRIVED                   | 10098.48           | 1.0490977364412046    | 0.27692369948098683   | 1         | true            |
+| q1    | NUMBER_OF_CUSTOMERS_SERVED                    | 10001.0            | 0.0                   | 0.0                   | 0         | true            |
+| q1    | **(5) SERVER_UTILIZATION_0**                  | 0.9999982632547841 | 1.7679022902752964E-6 | 4.6666199491069256E-7 | 1         | true            |
+| q1    | **(5) SERVER_UTILIZATION_1**                  | 0.9999967034380837 | 2.4110698883542543E-6 | 6.364348811343464E-7  | 1         | true            |
+| q1    | SIMULATION_RUN_LENGTH                         | 8009.336918015786  | 19.151086763060583    |                       |           | true            |
+| delay | AVG_ARRIVAL_TIME                              | 0.465569133367714  | 0.0027003292250433845 | 7.127888402012094E-4  | 1         | true            |
+| delay | AVG_DELAY_TIME                                | 1.495097376829722  | 0.014538170226531177  | 0.0038375489174844674 | 1         | true            |
+| delay | **(1) MEAN_NUMBER_OF_CUSTOMERS_IN_THIS_NODE** | 1.8854541846896395 | 0.01843046608256624   | 0.004864973656369272  | 1         | true            |
+| delay | NODE_THROUGHPUT                               | 1.2609413934777949 | 0.003027643727162656  | 7.991879807885514E-4  | 1         | true            |
+| delay | NUMBER_OF_CUSTOMERS_ARRIVED                   | 10100.0            | 0.0                   | 0.0                   | 0         | true            |
+| delay | NUMBER_OF_CUSTOMERS_SERVED                    | 10098.48           | 1.0490977364412046    | 0.27692369948098683   | 1         | true            |
+| delay | SIMULATION_RUN_LENGTH                         | 8008.728672071056  | 19.198618284678286    |                       |           | true            |
+
+### Risultati JMT
+1. ![](doc/img/jmt/model_2_noc.png)
+2. ![](doc/img/jmt/model_2_qt.png)
+3. ![](doc/img/jmt/model_2_rst.png)
+4. ![](doc/img/jmt/model_2_tro.png)
+5. ![](doc/img/jmt/model_2_u.png)
+
+## Model3
+![](doc/img/jmt/model_3_network.png)
+
+### Risultati QNetSim
+| node  | metric                                        | mean               | sd                    | h                     | runNeeded | accuracyReached |
+|-------|-----------------------------------------------|--------------------|-----------------------|-----------------------|-----------|-----------------|
+| q1    | AVG_ARRIVAL_TIME                              | 1.2120127925478483 | 0.026999169886946235  | 0.004977648054773501  | 4         | true            |
+| q1    | **(2) AVG_QUEUE_TIME**                        | 2.1310417477539674 | 0.2480112508215904    | 0.045724099125392145  | 102       | true            |
+| q1    | **(3) AVG_RESPONSE_TIME**                     | 3.731748462878743  | 0.2482546768558466    | 0.045768977880219434  | 34        | true            |
+| q1    | AVG_SERVICE_TIME                              | 1.6007067151247762 | 0.003767158953005468  | 6.945247395741752E-4  | 1         | true            |
+| q1    | MAX_NUMBER_OF_CUSTOMERS_IN_QUEUE              | 39.325             | 4.684988858366159     | 0.8637386177104978    | 107       | true            |
+| q1    | MEAN_NUMBER_OF_CUSTOMERS_IN_QUEUE             | 0.8920057991286177 | 0.10912218784325006   | 0.020118094309010556  | 113       | true            |
+| q1    | **(1) MEAN_NUMBER_OF_CUSTOMERS_IN_THIS_NODE** | 1.5616330573264616 | 0.11363096431147043   | 0.02094934588120414   | 40        | true            |
+| q1    | MEAN_NUMBER_OF_CUSTOMERS_SERVED               | 0.6696272581978426 | 0.008727763744619603  | 0.0016090767385753206 | 2         | true            |
+| q1    | **(5) NODE_THROUGHPUT**                       | 0.4182908433120136 | 0.005451718006275649  | 0.001005095106358508  | 2         | true            |
+| q1    | NUMBER_OF_CUSTOMERS_ARRIVED                   | 10002.48           | 1.704148057832732     | 0.31418185450280806   | 1         | true            |
+| q1    | NUMBER_OF_CUSTOMERS_SERVED                    | 10001.0            | 0.0                   | 0.0                   | 0         | true            |
+| q1    | **(4) SERVER_UTILIZATION_0**                  | 0.6696272581978416 | 0.008727763744619981  | 0.0016090767385753906 | 2         | true            |
+| q1    | SIMULATION_RUN_LENGTH                         | 23913.233961428792 | 311.001795474723      |                       |           | true            |
+| q2    | AVG_ARRIVAL_TIME                              | 0.579064144930426  | 0.0037610511336805537 | 6.933986836580537E-4  | 1         | true            |
+| q2    | **(2) AVG_QUEUE_TIME**                        | 152.92973973326568 | 0.3589360071066475    | 0.06617452036650942   | 1         | true            |
+| q2    | **(3) AVG_RESPONSE_TIME**                     | 154.51973015028977 | 0.3615270057410384    | 0.06665220465704134   | 1         | true            |
+| q2    | AVG_SERVICE_TIME                              | 1.5899904170241752 | 0.003035395678533158  | 5.596146643761645E-4  | 1         | true            |
+| q2    | MAX_NUMBER_OF_CUSTOMERS_IN_QUEUE              | 99.0               | 0.0                   | 0.0                   | 0         | true            |
+| q2    | MEAN_NUMBER_OF_CUSTOMERS_IN_QUEUE             | 95.86857295949507  | 0.11929803680200705   | 0.02199414438711741   | 1         | true            |
+| q2    | **(1) MEAN_NUMBER_OF_CUSTOMERS_IN_THIS_NODE** | 96.86857189253642  | 0.11929809165971839   | 0.021994154500849843  | 1         | true            |
+| q2    | MEAN_NUMBER_OF_CUSTOMERS_SERVED               | 0.9999989330413177 | 1.1480550658466973E-6 | 2.1165888022533693E-7 | 1         | true            |
+| q2    | NODE_THROUGHPUT                               | 0.6248744261484463 | 0.0012041990025285078 | 2.2200974502531947E-4 | 1         | true            |
+| q2    | NUMBER_OF_CUSTOMERS_ARRIVED                   | 15038.685          | 195.60668611595653    | 36.062636174474946    | 2         | true            |
+| q2    | NUMBER_OF_CUSTOMERS_SERVED                    | 14942.36           | 195.64530617713714    | 36.069756284953       | 2         | true            |
+| q2    | **(4) SERVER_UTILIZATION_0**                  | 0.9999989330413999 | 1.148055098799914E-6  | 2.1165888630069094E-7 | 1         | true            |
+| q2    | SIMULATION_RUN_LENGTH                         | 23912.59888137212  | 311.015128015716      |                       |           | true            |
+| delay | AVG_ARRIVAL_TIME                              | 0.5698142157795096 | 0.003906144989051238  | 7.201486226365353E-4  | 1         | true            |
+| delay | AVG_DELAY_TIME                                | 1.4989092029586708 | 0.009713994458240283  | 0.0017909011951703863 | 1         | true            |
+| delay | **(1) MEAN_NUMBER_OF_CUSTOMERS_IN_THIS_NODE** | 1.5698194097565394 | 0.013729036772609924  | 0.002531126455785457  | 1         | true            |
+| delay | **(5) NODE_THROUGHPUT**                       | 1.0472610465756695 | 0.0056730100650837275 | 0.0010458931749908116 | 1         | true            |
+| delay | NUMBER_OF_CUSTOMERS_ARRIVED                   | 25042.36           | 195.64530617713714    | 36.069756284953       | 1         | true            |
+| delay | NUMBER_OF_CUSTOMERS_SERVED                    | 25041.165          | 195.63720853101808    | 36.06826337859248     | 1         | true            |
+| delay | SIMULATION_RUN_LENGTH                         | 23912.738840540886 | 311.01380418574746    |                       |           | true            |
+
+### Risultati JMT
+1. ![](doc/img/jmt/model_3_noc.png)
+2. ![](doc/img/jmt/model_3_qt.png)
+3. ![](doc/img/jmt/model_2_rst.png)
+4. ![](doc/img/jmt/model_3_u.png)
+5. ![](doc/img/jmt/model_3_tro.png)
