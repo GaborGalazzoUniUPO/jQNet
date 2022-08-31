@@ -133,7 +133,7 @@ un oggetto json.
 ## Scelte implementative
 
 ### Package and Class Diagram
-![](http://www.plantuml.com/plantuml/uml/ZPNFJkCm4CRlUOgSaU09K2NKPH47_cmhk4_JsSggOqSJcnKBUNSIEzHnF4x9APhvUJxFPsVIG7M40vPM2TlegpUG3U7LhbAg5NLvVVsReCRLglmeolvfHfhB3KybeMtBhQYj1ADf5d-mqeYDLOze_cawRh3HP6RCOaxlSKoSCYUjyl9oTKQ1pVRhBZAg31TsC01TPCh1YWLJ7a2ekvVxMTGNI-EZzAjeBKZn7scY5-gD8fstmqMS2nEfyTt5Ox5fXfUR4k5CYwXf0hNN_6KGoY3zXGgzyOt4hI64-WuLKdGz0hbnvG8HdrrQmftAVD74a-zjAjyWkyzlnlcABSiC3-nQGr2PScrReskazR0WGlpHhALkSN-EUcfGnKm4CKNwPZzN2-f9HMv1KEaI1_0DbOdwvmsu7JYcfHiYqK-GNFeNDa364deW8bp8xpTRPSBaIdL5qXHfQuGw_A2jZIVxAmO63-zC1y-aTx0JKfZtyx2_bdCk0lFrV9jB8cnvVXdhJ_Ws-g7s0tU6sSSUgWIk-pyMBSTlXJfoOMsfmbZQbVOT9UAkV2OtIEHIJcQIZ1M7a1jtwUKxfPREv0JbFz9G9pVg-ZCg2iRCSKWNaGLZS44qmI9JaYmtJ5amDzJ3o9xyFjW6udztWlG-T5y0)
+![](doc/diagrams/class.png)
 ### Descrizioni
 #### gui
 Questo Package contiene i form grafici e le schemate di visualizzazione
@@ -152,7 +152,7 @@ Conitene i descrittori dei nodi della rete:
 ##### network.routing
 Contiene i descrittori delle strategie di Routing
 ## Gestione dei Generatori di Sequenza Casuali
-![](http://www.plantuml.com/plantuml/uml/dPLBJiCm48RtdC9BMAGdgBBWLHO58IeEC4scwQX-rR4B5VJkcAIlf8wDyBBpVPDfvfUZeLX1XSn9SbgDDi2rmT6yaB8cCJ8WIoNOUFneG62UiwyhvWz9YsO11RAt1fYWH0DMcLxrsN5BckFC6eGpgi4A3dNDfhWKQBeDsif1RebWYvxCikmx3uuKxTLgqLa7Yjxyt_FoY__TQ7g_Z99gQsZkB2dPUVajTdf7jsYaSfpJ_PdHPqWgGS0ZoDsIPci71YFCmzeHfnNoRGmo76GL0pwraYXjV9u9Ae6-M4IOfwr6yxTsKrMzA2EYJ19uLJLPsc0Id5bN-f4YnBkaXU_I8Ov8SAKiAzM7_8rfi6renGabkFA44uv0Ihg81CiuBkom4DvfmWf69k748fHGWv5YcTFPW3103_KVJbjK2sGloWUI6EIF0eEv_naAswdlFmk7unUnL2MhsiiDhtitvCqHtfqQTqUul5MRqpgx7m00)
+![](doc/diagrams/random.png)
 ### Generazione di numeri casuali
 Per generare delle sequenza lunghe di numeri casuali si è utilizzato il generatore di **Lehmer** implementato cella classe 
 [LehmerGenerator](src/main/java/uniupo/valpre/bcnnsim/random/LehmerGenerator.java)
@@ -179,7 +179,7 @@ Le distribuzioni implementate sono
 
 ## Implementazione della Simulazione
 
-![](http://www.plantuml.com/plantuml/uml/dLNDZjCm4BxxAKQvj5rfLuBx8YshWbQgsAhbWX07Rp898wLsi9qYBU9zU0zUZ1dR-IbBOKKELJgUds--RpnPNgpWyl8L51khAwYmRJKu30YLXffQ17x3fYKWq_MXK9rsWG9P0tiwzAqEri4tbLAutcGZdozNXL9Ylhw-Vls2V-AVujQXXTveUBFU5Cdq5WswPDn9vMtVKj0Ce8M35KIMYm_rOyGM7TZ649IjzfuHoXkX2QHqqt3nneAMJhW827WyoY7xAUqS7ItuNevzq8_i7HCugj7HWVrihaA6-1HyR2dw5UgkXc9cW83kG4O7NK3uZ2O6Vlo0_jFO5hMmMs_lT--XOzHIT9uFMu-fsje7n-25XmJN2WFjdAZx451QcoDVlhELNVtMWFpzqZDpYvI9bPXqum0S9JjeenjSYvS8bemtmg4pDbAdoxBFGXCqqXELn9x2n2RdXvy_17RYDZC19rJuGBwqS9Cy_bd7TrXIdGgDhhtqpdGcgJ4fNDfAivCyWkYMOordh91Vq1qffclfWM4FmEIPmDtm03NcD74btGpXE4LaIGTQXUQQM8IzkB8Ua-VK6-SDUEZo6KViv_f7Ono2_mjTc-gkLZb3R6hBGgDvr7FQcQSkcmT2DqA9FUapYtgxI6eERF3TYoG_aNLENSUJPyyJ-3Vo_4YUU8tDjulPHCWIocJ4oyvupipGR8Zsio6Q27fkH6Pslg7cqDEigpI4ustqVOdUqr6d15Ihiv8-aJCwxaIoq4VLfiMbP1lhT0MGoJ0uBeRuV5Udb-HFkozUNTxCUPViSMg7xN7x3gCJImbSrIw8koYp1CGosyPnXnmphBuCdtTzPR-QStjJgMVjGnW-62_bWw66JqVYvkhgQlP9YHwfyUN5wXS0)
+![](doc/diagrams/simulation_algorithm.png)
 La procedura di simulazione è implementata nella classe [Simulator](https://github.com/GaborGalazzoUniUPO/jQNet/blob/98a4409a461de6922f50f46f01fd1184a295e2af/src/main/java/uniupo/valpre/bcnnsim/sim/Simulator.java#L35)
 e poi nelle varie implementazioni del metodo **manageEvent(Event e)** dei [nodi](https://github.com/GaborGalazzoUniUPO/jQNet/blob/98a4409a461de6922f50f46f01fd1184a295e2af/src/main/java/uniupo/valpre/bcnnsim/network/node/Queue.java#L54) 
 
