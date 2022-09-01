@@ -290,6 +290,12 @@ e poi nelle varie implementazioni del metodo **manageEvent(Event e)** dei [nodi]
 | delay | NUMBER_OF_CUSTOMERS_SERVED                    | 25041.165          | 195.63720853101808    | 36.06826337859248     | 1         | true            |
 | delay | SIMULATION_RUN_LENGTH                         | 23912.738840540886 | 311.01380418574746    |                       |           | true            |
 
+#### Probabilità che una stazione sia vuota e l'altra con almento di un servitore:
+![](doc/formula/f1.png)  
+
+![](doc/formula/f2.png)  
+
+![](doc/formula/f3.png)
 ### Risultati JMT
 1. ![](doc/img/jmt/model_3_noc.png)
 2. ![](doc/img/jmt/model_3_qt.png)
