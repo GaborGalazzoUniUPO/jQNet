@@ -291,10 +291,8 @@ e poi nelle varie implementazioni del metodo **manageEvent(Event e)** dei [nodi]
 | delay | SIMULATION_RUN_LENGTH                         | 23912.738840540886 | 311.01380418574746    |                       |           | true            |
 
 #### Probabilità che una stazione sia vuota e l'altra con almento di un servitore:
-![](doc/formula/f1.png)  
-
-![](doc/formula/f2.png)  
-
+![](doc/formula/f1.png)
+![](doc/formula/f2.png)
 ![](doc/formula/f3.png)
 ### Risultati JMT
 1. ![](doc/img/jmt/model_3_noc.png)
