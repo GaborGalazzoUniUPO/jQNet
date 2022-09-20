@@ -52,7 +52,7 @@ public class Simulator {
 		var step = new AtomicLong(0);
 
 		// Per ogni simulazione parallela
-		var reports = IntStream.range(0, numRuns).parallel().mapToObj(num -> {
+		var reports = IntStream.range(0, numRuns).mapToObj(num -> {
 			boolean ended = false;
 			double simTime = 0L;
 
