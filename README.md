@@ -19,19 +19,20 @@ Una volta avviato l'applicativo si aprerà la schermata seguente
 
 #### Simulation Configuration
 
-3. **Customer for Run**: Numero di clienti serviti prima di terminare la simulazione dalla stazione di riferimento
-4. **Num Runs**: Numero di run da effettuare (in parallelo)
+3. **Seed**: Simulation random streams seed
+4. **Customer for Run**: Numero di clienti serviti prima di terminare la simulazione dalla stazione di riferimento
+5. **Num Runs**: Numero di run da effettuare (in parallelo)
 
 #### Evaluation Coefficients
 
-5. **Accuracy**: L'accuratezza in percentuale desiderata per le metriche
-6. **Precision Type**: Scelta della precisione se Assoluta o Relativa
-7. **Precision**: Precisione dell'accuratezza delle metriche
+6. **Accuracy**: L'accuratezza in percentuale desiderata per le metriche
+7. **Precision Type**: Scelta della precisione se Assoluta o Relativa
+8. **Precision**: Precisione dell'accuratezza delle metriche
 
 #### Interface
 
-8. **Run Simulation**: Avvia la simulazione
-9. **Network**: Rappresentazione grafica della Rete di Code
+9. **Run Simulation**: Avvia la simulazione
+10. **Network**: Rappresentazione grafica della Rete di Code
 
 Una volta avviata la simulazione comparirà una dinestra con una barra progresso in cui vengono riportate le metriche
 generate ad ogni run di simulazione
@@ -45,7 +46,7 @@ generate ad ogni run di simulazione
 3. **Metrics**: La metrica valutata dul nodo
 4. **Mean**: Il valore medio della metrica sulle più run
 5. **SD**: Deviazione Standard della metrica sulle più run
-6. **Coefficient**: T COnfidence Interval
+6. **Coefficient**: T Confidence Interval - Stima intervallare
 7. **Min Runs**: Stima delle run necessarie a raggiungere l'accuracy desiderata con la precision specificata
 8. **Accuracy Reached**: Indica se l'accuracy desiderata con tale precisione è stata raggiunta
 

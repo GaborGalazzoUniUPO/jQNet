@@ -16,7 +16,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Comparator;
@@ -29,6 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
+import uniupo.valpre.bcnnsim.random.LehmerGenerator;
 import uniupo.valpre.bcnnsim.sim.MultiRunNetworkReport;
 import uniupo.valpre.bcnnsim.sim.Simulator;
 
@@ -46,6 +46,7 @@ public class MainGUI {
 	private JButton runSimulationButton;
 	private JPanel networkPanel;
 	private mxGraphComponent mxGraphComponent;
+	private JSpinner seedField;
 
 
 	private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -57,6 +58,7 @@ public class MainGUI {
 
 		$$$setupUI$$$();
 		numRunField.setModel((new SpinnerNumberModel(0, 0, 100000000, 1)));
+		seedField.setModel((new SpinnerNumberModel(LehmerGenerator.DEFAULT_SEED, 0, 9999999999L, 1)));
 		numCustomerField.setModel((new SpinnerNumberModel(1000, 0, 100000000, 1)));
 		accuracyField.setModel(new SpinnerNumberModel(0.95, 0.0, 1.0, 0.01));
 		precisionField.setModel(new SpinnerNumberModel(0.05, 0.0, 1.0, 0.01));
@@ -117,7 +119,7 @@ public class MainGUI {
 			final AtomicReference<DefaultTableModel> lastModel = new AtomicReference<>(null);
 			final AtomicLong progress = new AtomicLong(0);
 			final Thread t = new Thread(() -> {
-				var simulator = new Simulator();
+				var simulator = new Simulator(((Double) seedField.getModel().getValue()).longValue());
 
 				var inputNumRun = ((int) numRunField.getValue());
 				var numRun = inputNumRun;
@@ -269,19 +271,24 @@ public class MainGUI {
 		referenceStationComboBox.setEnabled(false);
 		panel2.add(referenceStationComboBox, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		final JPanel panel3 = new JPanel();
-		panel3.setLayout(new GridLayoutManager(1, 4, new Insets(3, 3, 3, 3), -1, -1));
+		panel3.setLayout(new GridLayoutManager(1, 6, new Insets(3, 3, 3, 3), -1, -1));
 		mainPanel.add(panel3, new GridConstraints(1, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
 		panel3.setBorder(BorderFactory.createTitledBorder(null, "Simulation Configuration", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 		final JLabel label5 = new JLabel();
 		label5.setText("Customer for Run:");
-		panel3.add(label5, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		panel3.add(label5, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		numCustomerField = new JSpinner();
-		panel3.add(numCustomerField, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		panel3.add(numCustomerField, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		final JLabel label6 = new JLabel();
 		label6.setText("Num Run:");
-		panel3.add(label6, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		panel3.add(label6, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		numRunField = new JSpinner();
-		panel3.add(numRunField, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		panel3.add(numRunField, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		final JLabel label7 = new JLabel();
+		label7.setText("Seed");
+		panel3.add(label7, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		seedField = new JSpinner();
+		panel3.add(seedField, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		runSimulationButton = new JButton();
 		runSimulationButton.setEnabled(false);
 		runSimulationButton.setText("Run Simulation");
@@ -299,4 +306,5 @@ public class MainGUI {
 	public JComponent $$$getRootComponent$$$() {
 		return mainPanel;
 	}
+
 }

@@ -25,11 +25,26 @@ import java.util.stream.IntStream;
 
 public class Simulator {
 	private final MultipleStreamGenerator streamsGenerator = new MultipleLehmerStreamGenerator();
-	private final List<RandomGenerator> streams = streamsGenerator.generateStreams(LehmerGenerator.DEFAULT_SEED);
+	private final List<RandomGenerator> streams;
 	private final HashMap<String, RandomGenerator> activityStreams = new HashMap<>();
 	private final HashMap<String, RandomGenerator> routingStreams = new HashMap<>();
 	private int usedStreams = 0;
 	private ArrayList<NetworkReport> allReports = new ArrayList<>();
+
+	public Simulator() {
+		this(LehmerGenerator.DEFAULT_SEED);
+
+	}
+
+	public Simulator(long seed) {
+		streams = streamsGenerator.generateStreams(seed);
+	}
+
+
+	public void setSeed(long seed) {
+		streams.clear();
+		streams.addAll(streamsGenerator.generateStreams(seed));
+	}
 
 
 	public MultiRunNetworkReport runSimulation(QueueNetwork originalNetwork, int numRuns, String referenceStation, long maxNumOfDeparture,
